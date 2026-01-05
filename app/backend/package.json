@@ -1,0 +1,7 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "echo 'No backend tests yet' && exit 0"
+  }
+}

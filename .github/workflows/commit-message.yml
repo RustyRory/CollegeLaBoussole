@@ -1,0 +1,55 @@
+name: 'Vérification des messages de commit'
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  commit-message-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: 'Valider les messages de commit'
+        run: |
+          echo "🔍 Vérification des messages de commit pour la PR"
+
+          BASE_REF="${{ github.event.pull_request.base.ref }}"
+          echo "Branche de base : $BASE_REF"
+
+          git fetch origin $BASE_REF
+
+          REGEX="^(feat|fix|docs|chore|refactor|test|hotfix)\([a-z0-9_-]+\): Fixes #[0-9]+ - .+"
+
+          COMMITS=$(git log origin/$BASE_REF..HEAD --pretty=format:"%H")
+
+          INVALID=false
+
+          for COMMIT in $COMMITS; do
+            MESSAGE=$(git log -1 --pretty=format:"%s" $COMMIT)
+
+            # Ignorer les commits de merge
+            if [[ "$MESSAGE" =~ ^Merge\  ]]; then
+              echo "⏭️ Commit de merge ignoré: $MESSAGE"
+              continue
+            fi
+
+            if ! [[ "$MESSAGE" =~ $REGEX ]]; then
+              echo "❌ Commit invalide: $MESSAGE"
+              INVALID=true
+            else
+              echo "✅ Commit valide: $MESSAGE"
+            fi
+          done
+
+          if [ "$INVALID" = true ]; then
+            echo ""
+            echo "⚠️ Un ou plusieurs commits ne respectent pas le format attendu !"
+            echo "Format attendu : type(nom): Fixes #<issue> - message"
+            echo "Types autorisés : feat, fix, docs, chore, refactor, test, hotfix"
+            exit 1
+          fi

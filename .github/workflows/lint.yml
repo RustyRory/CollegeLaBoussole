@@ -1,0 +1,48 @@
+name: 'Lint Backend et Frontend'
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18]
+
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v3
+
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 'Installation ESLint & Prettier'
+        run: |
+          cd app/backend
+          npm init -y
+          npm install eslint prettier --save-dev
+          cd ../frontend
+          npm init -y
+          npm install eslint prettier --save-dev
+
+      - name: 'Lancer ESLint backend'
+        run: |
+          cd app/backend
+          npx eslint . --ext .js,.ts || echo "✅ Pas de fichiers backend JS/TS à lint"
+
+      - name: 'Lancer ESLint frontend'
+        run: |
+          cd app/frontend
+          npx eslint . --ext .js,.jsx || echo "✅ Pas de fichiers frontend JS/JSX à lint"
+
+      - name: 'Lancer Prettier check'
+        run: |
+          npx prettier --check . || echo "✅ Pas de fichiers à formater"

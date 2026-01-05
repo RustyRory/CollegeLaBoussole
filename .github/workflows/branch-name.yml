@@ -1,0 +1,45 @@
+name: 'Vérification du nom de la branche'
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  branch-name-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Vérification du nom de la branche'
+        id: check_branch
+        run: |
+          echo "PR branch: ${{ github.head_ref }}"
+
+          BRANCH="${{ github.head_ref }}"
+
+          # Regex pour les conventions
+          FEATURE_REGEX="^(feat|feature)/[0-9]+-[a-z0-9-]+$"
+          FIX_REGEX="^fix/[0-9]+-[a-z0-9-]+$"
+          HOTFIX_REGEX="^hotfix/[0-9]+-[a-z0-9-]+$"
+          RELEASE_REGEX="^release/[0-9]+\.[0-9]+\.[0-9]+$"
+
+          if [[ $BRANCH =~ $FEATURE_REGEX ]]; then
+            echo "✅ Nom de la branche valide (feature)"
+            exit 0
+          elif [[ $BRANCH =~ $FIX_REGEX ]]; then
+            echo "✅ Nom de la branche valide (fix)"
+            exit 0
+          elif [[ $BRANCH =~ $HOTFIX_REGEX ]]; then
+            echo "✅ Nom de la branche valide (hotfix)"
+            exit 0
+          elif [[ $BRANCH =~ $RELEASE_REGEX ]]; then
+            echo "✅ Nom de la branche valide (release)"
+            exit 0
+          else
+            echo "❌ Nom de la branche invalide: $BRANCH"
+            echo ""
+            echo "Le nom de la branche doit suivre la convention :"
+            echo "  feature/<issue-id>-description"
+            echo "  fix/<issue-id>-description"
+            echo "  hotfix/<issue-id>-description"
+            echo "  release/<x.y.z>"
+            exit 1
+          fi

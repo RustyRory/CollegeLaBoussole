@@ -5,6 +5,9 @@ on:
     branches:
       - 'release/*'
 
+permissions:
+  contents: write
+
 jobs:
   release:
     runs-on: ubuntu-latest
@@ -54,6 +57,6 @@ jobs:
       - name: 'Create GitHub Release'
         uses: ncipollo/release-action@v1
         with:
-          tag: 'v${{ steps.semver.outputs.version }}'
-          name: 'Release v${{ steps.semver.outputs.version }}'
-          body: '${{ steps.changelog.outputs.release_notes }}'
+          tag: v${{ steps.semver.outputs.version }}
+          name: Release v${{ steps.semver.outputs.version }}
+          body: ${{ steps.changelog.outputs.release_notes }}

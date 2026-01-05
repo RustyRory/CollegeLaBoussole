@@ -1,0 +1,55 @@
+name: 'Audit des dépendances npm Backend et Frontend'
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  npm-audit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18]
+
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v3
+
+      - name: 'Setup Node.js'
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # ----------------------
+      # Backend audit
+      # ----------------------
+      - name: 'Installation des dépendances backend'
+        run: |
+          echo "Installation des dépendances backend"
+          cd app/backend
+          npm install
+
+      - name: "Lancement de l'audit npm backend"
+        run: |
+          echo "Audit des dépendances backend"
+          cd app/backend
+          npm audit --audit-level=high
+
+      # ----------------------
+      # Frontend audit
+      # ----------------------
+      - name: 'Installation des dépendances frontend'
+        run: |
+          echo "Installation des dépendances frontend"
+          cd app/frontend
+          npm install
+
+      - name: "Lancement de l'audit npm frontend"
+        run: |
+          echo "Audit des dépendances frontend"
+          cd app/frontend
+          npm audit --audit-level=high

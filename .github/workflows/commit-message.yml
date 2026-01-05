@@ -7,28 +7,36 @@ on:
 jobs:
   commit-message-check:
     runs-on: ubuntu-latest
+
     steps:
-      - name: 'Vérification des messages de commit'
+      - name: 'Checkout du dépôt'
         uses: actions/checkout@v3
         with:
-          fetch-depth: 100 # pour récupérer tous les commits de la PR
+          fetch-depth: 0 # obligatoire pour comparer avec la branche de base
 
       - name: 'Valider les messages de commit'
         run: |
           echo "🔍 Vérification des messages de commit pour la PR"
+
+          BASE_BRANCH="${{ github.event.pull_request.base.ref }}"
+          echo "Branche de base : $BASE_BRANCH"
+
+          # Récupérer la branche de base
+          git fetch origin "$BASE_BRANCH"
 
           # Regex pour le format attendu
           # Ex : feat(login): Fixes #3 - Ajout page login
           REGEX="^(feat|fix|docs|chore|refactor|test|hotfix)\([a-z0-9_-]+\): Fixes #[0-9]+ - .+"
 
           # Récupérer tous les commits de la PR
-          COMMITS=$(git log origin/${{ github.event.pull_request.base.ref }}..HEAD --pretty=format:"%H")
+          COMMITS=$(git log origin/"$BASE_BRANCH"..HEAD --pretty=format:"%H")
 
           INVALID=false
 
           for COMMIT in $COMMITS; do
-            MESSAGE=$(git log -1 --pretty=format:"%s" $COMMIT)
-            if ! [[ $MESSAGE =~ $REGEX ]]; then
+            MESSAGE=$(git log -1 --pretty=format:"%s" "$COMMIT")
+
+            if ! [[ "$MESSAGE" =~ $REGEX ]]; then
               echo "❌ Commit invalide: $MESSAGE"
               INVALID=true
             else
@@ -39,6 +47,7 @@ jobs:
           if [ "$INVALID" = true ]; then
             echo ""
             echo "⚠️ Un ou plusieurs commits ne respectent pas le format attendu !"
+            echo ""
             echo "Format attendu : type(nom): Fixes #<issue> - message"
             echo "Types autorisés : feat, fix, docs, chore, refactor, test, hotfix"
             exit 1

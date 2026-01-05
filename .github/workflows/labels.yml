@@ -4,9 +4,15 @@ on:
   pull_request:
     types: [opened, edited, reopened, synchronize]
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   label-pr:
     runs-on: ubuntu-latest
+
     steps:
       - name: 'Déterminer le type de branche'
         id: branch
@@ -14,7 +20,6 @@ jobs:
           BRANCH="${{ github.head_ref }}"
           echo "Branch name: $BRANCH"
 
-          # Déterminer le label selon le type de branche
           if [[ "$BRANCH" =~ ^(feature|feat)/ ]]; then
             echo "branch_label=feature" >> $GITHUB_OUTPUT
           elif [[ "$BRANCH" =~ ^fix/ ]]; then

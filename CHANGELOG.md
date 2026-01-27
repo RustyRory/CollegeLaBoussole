@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -
 
-### Changement
+### Modifié
 
 -
 
@@ -24,6 +24,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Supprimé
 
 - ***
+
+---
+
+## [0.0.2] - 2026-01-27
+
+### Ajouté
+
+- Cahier des charges
+
+### Modifié
+
+- README.md
+- CONTRIBUTING.md
+- INSTALL.md
+- LICENSE
+- Workflow
+  - hotfix
+  - release
+  - Rulesets
+
+---
 
 ## [0.0.1] - 2026-01-05
 

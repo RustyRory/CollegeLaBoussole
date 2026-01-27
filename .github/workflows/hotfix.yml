@@ -1,19 +1,27 @@
 name: 'Workflow Hotfix'
 
+permissions:
+  contents: write
+
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
-      - 'hotfix/*'
+      - main
+      - dev
 
 jobs:
   hotfix:
     runs-on: ubuntu-latest
+    if: >
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'hotfix/')
 
     steps:
       - name: 'Checkout code'
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0 # pour récupérer tous les tags
+          fetch-depth: 0
 
       - name: 'Configurer Git'
         run: |
@@ -23,41 +31,80 @@ jobs:
       - name: 'Déterminer la version hotfix'
         id: semver
         run: |
-          # Récupérer le dernier tag SemVer existant
-          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
-          echo "Latest tag: $LATEST_TAG"
+          set -e
 
-          # Incrément patch
-          MAJOR=$(echo $LATEST_TAG | cut -d. -f1)
-          MINOR=$(echo $LATEST_TAG | cut -d. -f2)
-          PATCH=$(echo $LATEST_TAG | cut -d. -f3)
-          PATCH=$((PATCH + 1))
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
 
-          VERSION="$MAJOR.$MINOR.$PATCH"
-          echo "Hotfix new version: $VERSION"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: 'Créer un tag git'
-        run: |
-          git tag "v${{ steps.semver.outputs.version }}"
-          git push origin "v${{ steps.semver.outputs.version }}"
-
-      - name: 'Extraire la section du changelog'
-        id: changelog
-        run: |
-          VERSION="${{ steps.semver.outputs.version }}"
-          if [[ -f CHANGELOG.md ]]; then
-            sed -n "/## \[$VERSION\]/,/^## /p" CHANGELOG.md > release_notes.txt
+          if [[ -z "$LATEST_TAG" ]]; then
+            VERSION="0.0.1"
           else
-            echo "No CHANGELOG.md found" > release_notes.txt
+            VERSION="${LATEST_TAG#v}"
+            MAJOR=$(echo "$VERSION" | cut -d. -f1)
+            MINOR=$(echo "$VERSION" | cut -d. -f2)
+            PATCH=$(echo "$VERSION" | cut -d. -f3)
+            PATCH=$((PATCH + 1))
+            VERSION="$MAJOR.$MINOR.$PATCH"
           fi
+
+          TAG="v$VERSION"
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "❌ Le tag $TAG existe déjà"
+            exit 1
+          fi
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: 'Vérifier le CHANGELOG'
+        id: changelog
+        if: github.event.pull_request.base.ref == 'main'
+        run: |
+          set -e
+          VERSION="${{ steps.semver.outputs.version }}"
+
+          if [[ ! -f CHANGELOG.md ]]; then
+            echo "❌ CHANGELOG.md est manquant"
+            exit 1
+          fi
+
+          SECTION=$(awk "
+            BEGIN {found=0}
+            /^## \\[$VERSION\\]/ {found=1}
+            found {print}
+            found && /^## \\[[0-9]/ && !/^## \\[$VERSION\\]/ {exit}
+          " CHANGELOG.md)
+
+          if [[ -z "$SECTION" ]]; then
+            echo "❌ Aucune entrée de changelog pour la version $VERSION"
+            exit 1
+          fi
+
+          CONTENT=$(echo "$SECTION" | grep -Ev '^(## |\s*$|### )')
+
+          if [[ -z "$CONTENT" ]]; then
+            echo "❌ Le changelog pour la version $VERSION est vide"
+            exit 1
+          fi
+
           echo "release_notes<<EOF" >> $GITHUB_OUTPUT
-          cat release_notes.txt >> $GITHUB_OUTPUT
+          echo "$SECTION" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: 'Créer une release GitHub'
+      - name: 'Créer le tag'
+        if: github.event.pull_request.base.ref == 'main'
+        run: |
+          git tag "${{ steps.semver.outputs.tag }}"
+          git push origin "${{ steps.semver.outputs.tag }}"
+
+      - name: 'Créer la GitHub Release'
+        if: github.event.pull_request.base.ref == 'main'
         uses: ncipollo/release-action@v1
         with:
-          tag: 'v${{ steps.semver.outputs.version }}'
-          name: 'Hotfix v${{ steps.semver.outputs.version }}'
+          tag: '${{ steps.semver.outputs.tag }}'
+          name: '${{ steps.semver.outputs.tag }}'
           body: '${{ steps.changelog.outputs.release_notes }}'
+
+      - name: 'PR mergée sur dev'
+        if: github.event.pull_request.base.ref == 'dev'
+        run: echo "PR mergée sur dev, aucune release ni tag créé."

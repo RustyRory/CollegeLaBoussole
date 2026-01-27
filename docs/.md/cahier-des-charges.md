@@ -374,3 +374,8 @@ Annexes
 - Exemples de sites de référence
 - Documents fournis par l’association
 - Notes des réunions
+
+
+Lien vers le PDF
+
+Télécharger le [Cahier des charges](../pdf/cahier-des-charges.pdf) .

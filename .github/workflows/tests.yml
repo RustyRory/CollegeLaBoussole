@@ -16,12 +16,12 @@ jobs:
 
       - name: Backend tests
         run: |
-          cd backend
+          cd collegeLaBoussoleApp/backend
           npm install
           npm test
 
       - name: Frontend tests
         run: |
-          cd frontend
+          cd collegeLaBoussoleApp/frontend
           npm install
           npm test

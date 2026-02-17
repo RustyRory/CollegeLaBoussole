@@ -3,7 +3,7 @@
 # Lint & Prettier check pour le backend
 # -------------------------------
 
-cd collegeLaBoussoleApp/backend || { echo "❌ Dossier backend introuvable"; exit 1; }
+cd "$(dirname "$0")/../backend" || { echo "❌ Dossier backend introuvable"; exit 1; }
 
 npm install
 

@@ -1,69 +1,77 @@
 // eslint.config.mts
-import js from "@eslint/js";
-import globals from "globals";
-import tsParser from "@typescript-eslint/parser";
-import tsPlugin from "@typescript-eslint/eslint-plugin";
-import reactPlugin from "eslint-plugin-react";
-import json from "@eslint/json";
-import markdown from "@eslint/markdown";
-import css from "@eslint/css";
 import { defineConfig } from "eslint/config";
 
 export default defineConfig([
+  // -------------------------------
+  // Ignorer les fichiers/dossiers
+  // -------------------------------
   {
     ignores: [
-      "package-lock.json",
-      "pnpm-lock.yaml",
-      "yarn.lock",
       "node_modules",
+      ".next",
+      "out",
       ".venv",
+      "package-lock.json",
+      "yarn.lock",
+      "pnpm-lock.yaml",
     ],
   },
 
-  // Bloc JS/TS/React
+  // -------------------------------
+  // JS / TS / React / Next.js
+  // -------------------------------
   {
-    files: ["**/*.{js,mjs,cjs,ts,tsx,jsx,mts,cts}"],
+    files: ["**/*.{js,jsx,ts,tsx}"],
     languageOptions: {
-      parser: tsParser,
-      globals: globals.browser,
+      parser: "@typescript-eslint/parser",
     },
     plugins: {
-      js,
-      "@typescript-eslint": tsPlugin,
-      react: reactPlugin,
+      "@typescript-eslint": "@typescript-eslint/eslint-plugin",
+      react: "eslint-plugin-react",
+      "react-hooks": "eslint-plugin-react-hooks",
+      "@next": "@next/eslint-plugin-next",
     },
+    extends: [
+      "eslint:recommended",
+      "plugin:@typescript-eslint/recommended",
+      "plugin:react/recommended",
+      "plugin:react-hooks/recommended",
+      "plugin:@next/next/recommended",
+      "prettier",
+    ],
     rules: {
-      ...tsPlugin.configs.recommended.rules,
-      ...reactPlugin.configs.recommended.rules,
+      "@typescript-eslint/explicit-function-return-type": "off",
+      "react/react-in-jsx-scope": "off",
     },
     settings: {
-      react: {
-        version: "detect",
-      },
+      react: { version: "detect" },
     },
   },
 
-  // Bloc JSON
+  // -------------------------------
+  // JSON
+  // -------------------------------
   {
-    files: ["**/*.json", "**/*.jsonc", "**/*.json5"],
-    plugins: { json },
+    files: ["**/*.json"],
     language: "json/json",
-    extends: ["json/recommended"],
+    extends: ["plugin:json/recommended"],
   },
 
+  // -------------------------------
   // Markdown
+  // -------------------------------
   {
     files: ["**/*.md"],
-    plugins: { markdown },
-    language: "markdown/commonmark",
-    extends: ["markdown/recommended"],
+    language: "markdown/markdown",
+    extends: ["plugin:markdown/recommended"],
   },
 
+  // -------------------------------
   // CSS
+  // -------------------------------
   {
     files: ["**/*.css"],
-    plugins: { css },
     language: "css/css",
-    extends: ["css/recommended"],
+    extends: ["plugin:css/recommended"],
   },
 ]);

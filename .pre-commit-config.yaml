@@ -25,7 +25,7 @@ repos:
     hooks:
       - id: commit-msg
         name: Commit Message Check
-        entry: bash scripts/commit-msg-check.sh
+        entry: bash collegeLaBoussoleApp/scripts/commit-msg-check.sh
         language: system
         stages: [pre-commit]
 
@@ -36,7 +36,7 @@ repos:
     hooks:
       - id: branch-name
         name: Branch Name Check
-        entry: bash scripts/check-branch-name.sh
+        entry: bash collegeLaBoussoleApp/scripts/check-branch-name.sh
         language: system
         stages: [pre-commit]
 
@@ -47,7 +47,7 @@ repos:
     hooks:
       - id: frontend-lint
         name: ESLint & Prettier frontend
-        entry: bash scripts/frontend-lint.sh
+        entry: bash collegeLaBoussoleApp/scripts/frontend-lint.sh
         language: system
         stages: [pre-commit]
 
@@ -58,7 +58,7 @@ repos:
     hooks:
       - id: backend-lint
         name: ESLint & Prettier backend
-        entry: bash scripts/backend-lint.sh
+        entry: bash collegeLaBoussoleApp/scripts/backend-lint.sh
         language: system
         stages: [pre-commit]
 
@@ -69,7 +69,7 @@ repos:
     hooks:
       - id: check-structure
         name: Project Structure Check
-        entry: bash scripts/check-structure.sh
+        entry: bash collegeLaBoussoleApp/scripts/check-structure.sh
         language: system
         stages: [pre-commit]
 
@@ -80,7 +80,7 @@ repos:
     hooks:
       - id: run-tests
         name: Run frontend & backend tests
-        entry: bash scripts/run-tests.sh
+        entry: bash collegeLaBoussoleApp/scripts/run-tests.sh
         language: system
         stages: [pre-commit]
 
@@ -91,6 +91,6 @@ repos:
     hooks:
       - id: npm-audit
         name: NPM Audit frontend & backend
-        entry: bash scripts/npm-audit.sh
+        entry: bash collegeLaBoussoleApp/scripts/npm-audit.sh
         language: system
         stages: [pre-commit]

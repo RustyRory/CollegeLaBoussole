@@ -25,12 +25,6 @@ export default defineConfig([
     languageOptions: {
       parser: "@typescript-eslint/parser",
     },
-    plugins: {
-      "@typescript-eslint": "@typescript-eslint/eslint-plugin",
-      react: "eslint-plugin-react",
-      "react-hooks": "eslint-plugin-react-hooks",
-      "@next": "@next/eslint-plugin-next",
-    },
     extends: [
       "eslint:recommended",
       "plugin:@typescript-eslint/recommended",

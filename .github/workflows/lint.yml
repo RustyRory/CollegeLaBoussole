@@ -14,15 +14,21 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install deps
-        run: |
-          cd collegeLaBoussoleApp/backend && npm install
-          cd ../frontend && npm install
+      - name: Install backend
+        working-directory: collegeLaBoussoleApp/backend
+        run: npm install
 
-      - name: ESLint
-        run: |
-          cd collegeLaBoussoleApp/backend && npx eslint . --ext .js,.ts
-          cd ../frontend && npx eslint . --ext .js,.jsx
+      - name: Install frontend
+        working-directory: collegeLaBoussoleApp/frontend
+        run: npm install
+
+      - name: ESLint backend
+        working-directory: collegeLaBoussoleApp/backend
+        run: npx eslint . --ext .js,.ts
+
+      - name: ESLint frontend
+        working-directory: collegeLaBoussoleApp/frontend
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx
 
       - name: Prettier
         run: npx prettier --check .

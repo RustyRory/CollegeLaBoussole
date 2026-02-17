@@ -10,13 +10,13 @@ repos:
     rev: v4.6.0
     hooks:
       - id: trailing-whitespace
-        exclude: ^\.venv/
+        exclude: ^(\.venv/|node_modules/|collegeLaBoussoleApp/backend/node_modules/|collegeLaBoussoleApp/frontend/node_modules/)
       - id: end-of-file-fixer
-        exclude: ^\.venv/
+        exclude: ^(\.venv/|node_modules/|collegeLaBoussoleApp/backend/node_modules/|collegeLaBoussoleApp/frontend/node_modules/)
       - id: check-yaml
-        exclude: ^\.venv/
+        exclude: ^(\.venv/|node_modules/|collegeLaBoussoleApp/backend/node_modules/|collegeLaBoussoleApp/frontend/node_modules/)
       - id: check-added-large-files
-        exclude: ^\.venv/
+        exclude: ^(\.venv/|node_modules/|collegeLaBoussoleApp/backend/node_modules/|collegeLaBoussoleApp/frontend/node_modules/)
 
   # -------------------------------
   # Commit message check (Conventional Commit)

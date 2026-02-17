@@ -1,0 +1,93 @@
+name: Hotfix Release
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [closed]
+
+jobs:
+  hotfix-release:
+    if: >
+      github.event.pull_request.merged == true &&
+      startsWith(github.head_ref, 'hotfix/')
+    runs-on: ubuntu-latest
+    steps:
+      # ---------------------------------------
+      # 1️⃣ Checkout repo
+      # ---------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ---------------------------------------
+      # 2️⃣ Get latest tag
+      # ---------------------------------------
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "LATEST_TAG=$TAG" >> $GITHUB_ENV
+          echo "🔎 Dernier tag détecté: $TAG"
+
+      # ---------------------------------------
+      # 3️⃣ Increment patch version
+      # ---------------------------------------
+      - name: Increment patch version
+        id: increment
+        run: |
+          VERSION=${LATEST_TAG#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+          PATCH=$((PATCH + 1))
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "🚀 Nouvelle version: v$NEW_VERSION"
+
+      # ---------------------------------------
+      # 4️⃣ Check if tag already exists
+      # ---------------------------------------
+      - name: Check if tag exists
+        run: |
+          if git rev-parse "v${{ steps.increment.outputs.new_version }}" >/dev/null 2>&1; then
+            echo "❌ Le tag v${{ steps.increment.outputs.new_version }} existe déjà."
+            exit 1
+          fi
+
+      # ---------------------------------------
+      # 5️⃣ Create and push tag
+      # ---------------------------------------
+      - name: Create tag
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git tag v${{ steps.increment.outputs.new_version }}
+          git push origin v${{ steps.increment.outputs.new_version }}
+
+      # ---------------------------------------
+      # 6️⃣ Create GitHub Release
+      # ---------------------------------------
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.increment.outputs.new_version }}
+          generate_release_notes: true
+
+      # ---------------------------------------
+      # 7️⃣ Create PR to sync main into dev
+      # ---------------------------------------
+      - name: Create PR to sync main into dev
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: sync-main-to-dev
+          base: dev
+          title: "🔄 Sync main into dev after hotfix v${{ steps.increment.outputs.new_version }}"
+          body: |
+            Synchronisation automatique après hotfix.
+
+            - Hotfix mergée vers main
+            - Release patch v${{ steps.increment.outputs.new_version }} créée
+
+            Merci de valider cette PR pour garder dev synchronisé.

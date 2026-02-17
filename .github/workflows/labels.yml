@@ -1,51 +1,13 @@
-name: 'Label automatique de la PR selon le type de branche'
+name: Auto Label PR
 
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
-
-permissions:
-  contents: read
-  pull-requests: write
-  issues: write
+    types: [opened]
 
 jobs:
-  label-pr:
+  label:
     runs-on: ubuntu-latest
-
     steps:
-      - name: 'Déterminer le type de branche'
-        id: branch
-        run: |
-          BRANCH="${{ github.head_ref }}"
-          echo "Branch name: $BRANCH"
-
-          if [[ "$BRANCH" =~ ^(feature|feat)/ ]]; then
-            echo "branch_label=feature" >> $GITHUB_OUTPUT
-          elif [[ "$BRANCH" =~ ^fix/ ]]; then
-            echo "branch_label=fix" >> $GITHUB_OUTPUT
-          elif [[ "$BRANCH" =~ ^hotfix/ ]]; then
-            echo "branch_label=hotfix" >> $GITHUB_OUTPUT
-          elif [[ "$BRANCH" =~ ^release/ ]]; then
-            echo "branch_label=release" >> $GITHUB_OUTPUT
-          else
-            echo "branch_label=" >> $GITHUB_OUTPUT
-          fi
-
-      - name: 'Ajouter le label à la PR'
-        if: steps.branch.outputs.branch_label != ''
-        uses: actions-ecosystem/action-add-labels@v1
+      - uses: actions/labeler@v5
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          labels: ${{ steps.branch.outputs.branch_label }}
-
-      - name: 'Avertir si le type de branche est inconnu'
-        if: steps.branch.outputs.branch_label == ''
-        run: |
-          echo "⚠️ Impossible d'assigner un label automatiquement."
-          echo "Le nom de la branche ne suit pas la convention:"
-          echo "  feature/<issue>-description"
-          echo "  fix/<issue>-description"
-          echo "  hotfix/<issue>-description"
-          echo "  release/<x.y.z>"
-          echo "Ajouter un label manuellement."
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"

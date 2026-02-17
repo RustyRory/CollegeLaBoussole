@@ -1,64 +1,27 @@
-name: 'Lancer les Tests Backend et Frontend'
+name: Tests
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
-  push:
-    branches:
-      - main
-      - dev
+    types: [opened, synchronize, reopened]
 
 jobs:
-  test-backend-frontend:
+  test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18] # adapte selon la version Node de ton projet
 
     steps:
-      - name: 'Checkout code'
-        uses: actions/checkout@v3
-
-      - name: 'Setup Node.js'
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
 
-      # ----------------------
-      # Backend
-      # ----------------------
-      - name: 'Installer les dépendances backend'
+      - name: Backend tests
         run: |
-          echo "Installation des dépendances backend"
-          cd app/backend
+          cd backend
           npm install
-
-      - name: 'Lancer les tests backend'
-        run: |
-          echo "Lancement des tests backend"
-          cd app/backend
           npm test
 
-      # ----------------------
-      # Frontend
-      # ----------------------
-      - name: 'Installer les dépendances frontend'
+      - name: Frontend tests
         run: |
-          echo "Installation des dépendances frontend"
-          cd app/frontend
+          cd frontend
           npm install
-
-      - name: 'Lancer les tests frontend'
-        run: |
-          echo "Lancement des tests frontend"
-          cd app/frontend
           npm test
-
-      # ----------------------
-      # Optional: build frontend
-      # ----------------------
-      - name: 'Build frontend pour vérification'
-        run: |
-          echo "Building du frontend"
-          cd app/frontend
-          npm run build || { echo "❌ Build frontend échoué"; exit 1; }

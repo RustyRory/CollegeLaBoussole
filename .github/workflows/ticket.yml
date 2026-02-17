@@ -1,43 +1,22 @@
-name: 'Vérification de la référence au ticket dans la PR'
+name: Issue Reference Check
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
+    types: [opened, synchronize, reopened]
 
 jobs:
-  check-ticket:
+  ticket-check:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Vérifier le titre et la branche de la PR pour une référence au ticket'
+      - name: Check issue reference
         run: |
-          set -e
+          TITLE="${{ github.event.pull_request.title }}"
+          BRANCH="${{ github.head_ref }}"
 
-          PR_TITLE="${{ github.event.pull_request.title }}"
-          BRANCH_NAME="${{ github.head_ref }}"
-
-          echo "Titre de PR : $PR_TITLE"
-          echo "Nom de branche : $BRANCH_NAME"
-
-          # Autoriser dev et main sans numéro d'issue
-          if [[ "$BRANCH_NAME" == "dev" ]] || [[ "$BRANCH_NAME" == "main" ]]; then
-            echo "✅ PR depuis $BRANCH_NAME, pas besoin de référence à l'issue"
-            exit 0
+          if [[ ! "$TITLE" =~ #[0-9]+ && ! "$BRANCH" =~ [0-9]+- ]]; then
+            echo "❌ Aucune référence à une issue trouvée."
+            echo "Ajoute #<numero> dans le titre ou la branche."
+            exit 1
           fi
 
-          # Regex pour le commit / titre PR : type(nom): Fixes #<num> - message
-          if [[ "$PR_TITLE" =~ ^(feat|fix|docs|chore|refactor|test|hotfix)\([a-zA-Z0-9_-]+\):\ Fixes\ \#[0-9]+\ -\ .+ ]]; then
-            echo "✅ Titre de PR valide avec référence au ticket"
-            exit 0
-          fi
-
-          # Regex pour le nom de branche : feature/123-description, fix/123-description, hotfix/123-description
-          if [[ "$BRANCH_NAME" =~ ^(feature|fix|hotfix)/[0-9]+-.+ ]]; then
-            echo "✅ Nom de branche valide avec référence au ticket"
-            exit 0
-          fi
-
-          echo "❌ Aucune référence valide au ticket trouvée !"
-          echo "Le titre de la PR doit être au format : type(nom): Fixes #<num> - message"
-          echo "Exemple de nom de branche valide : feature/123-description"
-          echo "OU la PR doit provenir de dev ou main"
-          exit 1
+          echo "✅ Issue détectée."

@@ -1,55 +1,63 @@
-name: 'Vérification des messages de commit'
+name: Commit Message Check
 
 on:
-  pull_request:
-    types: [opened, edited, synchronize]
+  push:
+    branches:
+      - main
+      - dev
+      - feature/**
+      - fix/**
+      - hotfix/**
+      - release/**
 
 jobs:
-  commit-message-check:
+  commit-check:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 'Checkout'
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      - name: 'Valider les messages de commit'
+      - name: Validate commit messages
         run: |
-          echo "🔍 Vérification des messages de commit pour la PR"
+          echo "🔎 Vérification des messages de commit..."
+          echo ""
 
-          BASE_REF="${{ github.event.pull_request.base.ref }}"
-          echo "Branche de base : $BASE_REF"
+          REGEX="^(feat|feature|fix|docs|chore|refactor|test|hotfix)\([a-z0-9-]+\): Fixes #[0-9]+ - .+"
 
-          git fetch origin $BASE_REF
+          INVALID=0
 
-          REGEX="^(feat|fix|docs|chore|refactor|test|hotfix)\([a-z0-9_-]+\): Fixes #[0-9]+ - .+"
+          COMMITS=$(git log -n 20 --format=%s)
 
-          COMMITS=$(git log origin/$BASE_REF..HEAD --pretty=format:"%H")
+          for commit in "$COMMITS"; do
+            echo "➡️ Analyse: \"$commit\""
 
-          INVALID=false
-
-          for COMMIT in $COMMITS; do
-            MESSAGE=$(git log -1 --pretty=format:"%s" $COMMIT)
-
-            # Ignorer les commits de merge
-            if [[ "$MESSAGE" =~ ^Merge\  ]]; then
-              echo "⏭️ Commit de merge ignoré: $MESSAGE"
-              continue
-            fi
-
-            if ! [[ "$MESSAGE" =~ $REGEX ]]; then
-              echo "❌ Commit invalide: $MESSAGE"
-              INVALID=true
+            if ! [[ "$commit" =~ $REGEX ]]; then
+              echo ""
+              echo "❌ Commit invalide détecté:"
+              echo "   \"$commit\""
+              echo ""
+              echo "📘 Format attendu :"
+              echo "   type(scope): Fixes #<issue> - message"
+              echo ""
+              echo "📌 Types autorisés :"
+              echo "   feat | feature | fix | docs | chore | refactor | test | hotfix"
+              echo ""
+              echo "✅ Exemple valide :"
+              echo "   feat(login): Fixes #12 - Ajout page login"
+              echo ""
+              echo "💡 Exemple corrigé possible :"
+              echo "   feat(module): Fixes #1 - Description claire du changement"
+              echo ""
+              INVALID=1
             else
-              echo "✅ Commit valide: $MESSAGE"
+              echo "   ✅ Commit valide"
+              echo ""
             fi
           done
 
-          if [ "$INVALID" = true ]; then
-            echo ""
-            echo "⚠️ Un ou plusieurs commits ne respectent pas le format attendu !"
-            echo "Format attendu : type(nom): Fixes #<issue> - message"
-            echo "Types autorisés : feat, fix, docs, chore, refactor, test, hotfix"
+          if [ $INVALID -eq 1 ]; then
+            echo "🚫 Push bloqué : certains commits ne respectent pas la convention."
             exit 1
           fi
+
+          echo "🎉 Tous les commits respectent la convention."

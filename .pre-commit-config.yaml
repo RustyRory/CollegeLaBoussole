@@ -1,18 +1,96 @@
-repos:
-  - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v10.0.0-beta.0
-    hooks:
-      - id: eslint
-        name: ESLint Backend & Frontend
-        entry: npx eslint .
-        language: node
-        files: ^app/(backend|frontend)/.*\.(js|ts|jsx)$
+# -------------------------------
+# Pre-commit config adaptée pour collegeLaBoussoleApp
+# -------------------------------
 
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.8
+repos:
+  # -------------------------------
+  # Hooks généraux fournis par pre-commit
+  # -------------------------------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
     hooks:
-      - id: prettier
-        name: Prettier Check
-        entry: npx prettier --check .
-        language: node
-        files: ^app/.*\.(js|ts|jsx|json|css|md|yaml)$
+      - id: trailing-whitespace
+        exclude: ^\.venv/
+      - id: end-of-file-fixer
+        exclude: ^\.venv/
+      - id: check-yaml
+        exclude: ^\.venv/
+      - id: check-added-large-files
+        exclude: ^\.venv/
+
+  # -------------------------------
+  # Commit message check (Conventional Commit)
+  # -------------------------------
+  - repo: local
+    hooks:
+      - id: commit-msg
+        name: Commit Message Check
+        entry: bash scripts/commit-msg-check.sh
+        language: system
+        stages: [pre-commit]
+
+  # -------------------------------
+  # Branch name check
+  # -------------------------------
+  - repo: local
+    hooks:
+      - id: branch-name
+        name: Branch Name Check
+        entry: bash scripts/check-branch-name.sh
+        language: system
+        stages: [pre-commit]
+
+  # -------------------------------
+  # ESLint / Prettier frontend
+  # -------------------------------
+  - repo: local
+    hooks:
+      - id: frontend-lint
+        name: ESLint & Prettier frontend
+        entry: bash scripts/frontend-lint.sh
+        language: system
+        stages: [pre-commit]
+
+  # -------------------------------
+  # ESLint / Prettier backend
+  # -------------------------------
+  - repo: local
+    hooks:
+      - id: backend-lint
+        name: ESLint & Prettier backend
+        entry: bash scripts/backend-lint.sh
+        language: system
+        stages: [pre-commit]
+
+  # -------------------------------
+  # Vérification structure projet
+  # -------------------------------
+  - repo: local
+    hooks:
+      - id: check-structure
+        name: Project Structure Check
+        entry: bash scripts/check-structure.sh
+        language: system
+        stages: [pre-commit]
+
+  # -------------------------------
+  # Tests unitaires
+  # -------------------------------
+  - repo: local
+    hooks:
+      - id: run-tests
+        name: Run frontend & backend tests
+        entry: bash scripts/run-tests.sh
+        language: system
+        stages: [pre-commit]
+
+  # -------------------------------
+  # Security audit npm
+  # -------------------------------
+  - repo: local
+    hooks:
+      - id: npm-audit
+        name: NPM Audit frontend & backend
+        entry: bash scripts/npm-audit.sh
+        language: system
+        stages: [pre-commit]

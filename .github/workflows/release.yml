@@ -4,52 +4,38 @@ on:
   pull_request:
     branches:
       - main
-    types: [opened, synchronize, reopened]
-  pull_request_target:
-    branches:
-      - main
-    types: [closed]
+    types: [closed] # Se déclenche uniquement quand la PR est fermée
 
 jobs:
-  validate-release:
+  create-release:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Check CHANGELOG
-        run: |
-          if [ ! -f "CHANGELOG.md" ]; then
-            echo "❌ CHANGELOG.md manquant"
-            exit 1
-          fi
-      - name: Extract version
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from CHANGELOG
         id: version
         run: |
           VERSION=$(grep -m 1 "^## \[" CHANGELOG.md | sed -E 's/^## \[([0-9]+\.[0-9]+\.[0-9]+)\].*/\1/')
-          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "❌ Version invalide"
+          if [[ -z "$VERSION" || ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "❌ Version invalide ou introuvable dans CHANGELOG"
             exit 1
           fi
-          echo "version=$VERSION" >> $GITHUB_ENV
+          echo "NEW_VERSION=$VERSION" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "✅ Version détectée: $VERSION"
 
-  create-release:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Extract version
-        run: |
-          VERSION=$(grep -m 1 "^## \[" CHANGELOG.md | sed -E 's/^## \[([0-9]+\.[0-9]+\.[0-9]+)\].*/\1/')
-          echo "NEW_VERSION=$VERSION" >> $GITHUB_ENV
       - name: Create tag
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git tag v$NEW_VERSION
-          git push origin v$NEW_VERSION
+          git tag v${{ env.NEW_VERSION }}
+          git push origin v${{ env.NEW_VERSION }}
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:

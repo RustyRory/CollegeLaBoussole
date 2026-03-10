@@ -1,77 +1,129 @@
-name: Release
+name: "Release Automatisation"
+
+permissions:
+  contents: write # 🔑 indispensable pour créer tags et releases
 
 on:
   pull_request:
+    types: [closed] # le workflow se déclenche quand le PR est fermé/mergé
     branches:
       - main
-    types: [closed] # On ne lance le workflow que lorsque le PR est fermé/mergé
 
 jobs:
-  create-release:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+  release:
+    if: >
+      github.event.pull_request.merged == true &&
+      github.event.pull_request.head.ref == 'dev'
+
     runs-on: ubuntu-latest
+
     steps:
       # ---------------------------------------
-      # 1️⃣ Checkout repo complet
+      # 1️⃣ Checkout du code complet
       # ---------------------------------------
-      - uses: actions/checkout@v4
+      - name: "Checkout code"
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
       # ---------------------------------------
-      # 2️⃣ Récupérer la version actuelle dans le changelog
+      # 2️⃣ Configurer Git pour actions
       # ---------------------------------------
-      - name: Extract latest version from CHANGELOG
-        id: get_version
+      - name: "Configurer Git"
         run: |
-          # On récupère la première version listée (pas Unreleased)
-          VERSION_LINE=$(grep -m 1 "^## \[[0-9]\+\.[0-9]\+\.[0-9]\+\]" CHANGELOG.md)
-          CURRENT_VERSION=$(echo "$VERSION_LINE" | sed -E 's/^## \[([0-9]+\.[0-9]+\.[0-9]+)\].*/\1/')
-          echo "CURRENT_VERSION=$CURRENT_VERSION"
-          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
       # ---------------------------------------
-      # 3️⃣ Incrémenter version mineure
+      # 3️⃣ Déterminer la nouvelle version
       # ---------------------------------------
-      - name: Increment minor version
-        id: increment
+      - name: "Déterminer la nouvelle version"
+        id: semver
         run: |
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
-          MINOR=$((MINOR + 1))
-          PATCH=0
-          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
-          echo "NEW_VERSION=$NEW_VERSION"
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          set -e
+
+          # Dernier tag existant qui suit vX.Y.Z
+          LATEST_TAG=$(git tag --sort=-v:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1)
+
+          if [[ -z "$LATEST_TAG" ]]; then
+            VERSION="0.1.0"
+          else
+            VERSION="${LATEST_TAG#v}"
+            MAJOR=$(echo "$VERSION" | cut -d. -f1)
+            MINOR=$(echo "$VERSION" | cut -d. -f2)
+            PATCH=$(echo "$VERSION" | cut -d. -f3)
+
+            # Incrémentation de la version mineure (x.y+1.0)
+            MINOR=$((MINOR + 1))
+            PATCH=0
+            VERSION="$MAJOR.$MINOR.$PATCH"
+          fi
+
+          TAG="v$VERSION"
+          echo "Nouvelle release : $TAG"
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "❌ Le tag $TAG existe déjà"
+            exit 1
+          fi
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       # ---------------------------------------
-      # 4️⃣ Extraire le changelog pour cette version
+      # 4️⃣ Vérifier le CHANGELOG
       # ---------------------------------------
-      - name: Extract changelog for new version
-        id: changelog
+      - name: "Vérifier le CHANGELOG"
+        id: changelog_check
         run: |
-          # On prend le texte entre ## [Unreleased] et la prochaine version
-          CHANGELOG_TEXT=$(awk '/^## \['"$NEW_VERSION"'\]/,/^## \[.*\]/' CHANGELOG.md | sed '1d;$d')
-          echo "$CHANGELOG_TEXT"
-          echo "CHANGELOG_BODY<<EOF" >> $GITHUB_ENV
-          echo "$CHANGELOG_TEXT" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          set -e
+          VERSION="${{ steps.semver.outputs.version }}"
+
+          if [[ ! -f CHANGELOG.md ]]; then
+            echo "❌ CHANGELOG.md est manquant"
+            exit 1
+          fi
+
+          # Extraire uniquement la section correspondant à cette version
+          SECTION=$(awk "
+            BEGIN {found=0}
+            /^## \\[$VERSION\\]/ {found=1}
+            found {print}
+            found && /^## \\[[0-9]/ && !/^## \\[$VERSION\\]/ {exit}
+          " CHANGELOG.md)
+
+          if [[ -z "$SECTION" ]]; then
+            echo "❌ Aucune entrée de changelog pour la version $VERSION"
+            exit 1
+          fi
+
+          # Vérifier qu'il y a du contenu réel
+          CONTENT=$(echo "$SECTION" | grep -Ev '^(## |\s*$|### )')
+          if [[ -z "$CONTENT" ]]; then
+            echo "❌ Le changelog pour la version $VERSION est vide"
+            exit 1
+          fi
+
+          echo "✅ Changelog valide pour la version $VERSION"
+
+          echo "release_notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$SECTION" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       # ---------------------------------------
-      # 5️⃣ Créer et pousser le tag Git
+      # 5️⃣ Créer le tag et le pousser automatiquement
       # ---------------------------------------
-      - name: Create git tag
+      - name: "Créer le tag Git"
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git tag -a "v${{ env.NEW_VERSION }}" -m "Release v${{ env.NEW_VERSION }}"
-          git push origin "v${{ env.NEW_VERSION }}"
+          git tag "${{ steps.semver.outputs.tag }}"
+          git push origin "${{ steps.semver.outputs.tag }}"
 
       # ---------------------------------------
       # 6️⃣ Créer la GitHub Release
       # ---------------------------------------
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+      - name: "Créer la GitHub Release"
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: v${{ env.NEW_VERSION }}
-          body: ${{ env.CHANGELOG_BODY }}
+          tag: "${{ steps.semver.outputs.tag }}"
+          name: "${{ steps.semver.outputs.tag }}"
+          body: "${{ steps.changelog_check.outputs.release_notes }}"

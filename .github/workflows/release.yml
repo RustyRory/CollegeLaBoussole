@@ -1,123 +1,57 @@
-name: Release Validation
+name: Release
 
 on:
   pull_request:
     branches:
       - main
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, synchronize, reopened]
+  pull_request_target:
+    branches:
+      - main
+    types: [closed]
 
 jobs:
   validate-release:
-    if: github.head_ref == 'dev'
     runs-on: ubuntu-latest
-
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
     steps:
-      # ---------------------------------------
-      # 1️⃣ Checkout repo
-      # ---------------------------------------
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      # ---------------------------------------
-      # 2️⃣ Check CHANGELOG.md presence
-      # ---------------------------------------
-      - name: Check CHANGELOG presence
+      - uses: actions/checkout@v4
+      - name: Check CHANGELOG
         run: |
           if [ ! -f "CHANGELOG.md" ]; then
             echo "❌ CHANGELOG.md manquant"
             exit 1
           fi
-
-      # ---------------------------------------
-      # 3️⃣ Extract version from CHANGELOG
-      # ---------------------------------------
-      - name: Extract version from CHANGELOG
+      - name: Extract version
         id: version
         run: |
           VERSION=$(grep -m 1 "^## \[" CHANGELOG.md | sed -E 's/^## \[([0-9]+\.[0-9]+\.[0-9]+)\].*/\1/')
-
-          if [ -z "$VERSION" ]; then
-            echo "❌ Aucune version SemVer trouvée dans CHANGELOG"
-            exit 1
-          fi
-
           if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "❌ Version invalide (format x.y.z requis)"
+            echo "❌ Version invalide"
             exit 1
           fi
-
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_ENV
           echo "✅ Version détectée: $VERSION"
 
-  # ---------------------------------------
-  # 4️⃣ Create release (only if PR merged)
-  # ---------------------------------------
   create-release:
-    if: github.event.pull_request.merged == true && github.head_ref == 'dev'
-    needs: validate-release
     runs-on: ubuntu-latest
-
+    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      # ---------------------------------------
-      # Get latest tag from main
-      # ---------------------------------------
-      - name: Get latest tag
-        id: get_tag
+      - name: Extract version
         run: |
-          TAG=$(git describe --tags --abbrev=0 origin/main 2>/dev/null || echo "v0.0.0")
-          echo "LATEST_TAG=$TAG" >> $GITHUB_ENV
-          echo "Dernier tag sur main: $TAG"
-
-      # ---------------------------------------
-      # Increment minor version
-      # ---------------------------------------
-      - name: Increment minor version
-        id: increment
-        run: |
-          VERSION=${LATEST_TAG#v}
-          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
-
-          MINOR=$((MINOR + 1))
-          PATCH=0
-
-          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
-          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
-          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
-          echo "🚀 Nouvelle version mineure: v$NEW_VERSION"
-
-      # ---------------------------------------
-      # Check if tag exists
-      # ---------------------------------------
-      - name: Check if tag exists
-        run: |
-          if git rev-parse "v${{ steps.increment.outputs.new_version }}" >/dev/null 2>&1; then
-            echo "❌ Le tag v${{ steps.increment.outputs.new_version }} existe déjà."
-            exit 1
-          fi
-
-      # ---------------------------------------
-      # Create and push tag
-      # ---------------------------------------
+          VERSION=$(grep -m 1 "^## \[" CHANGELOG.md | sed -E 's/^## \[([0-9]+\.[0-9]+\.[0-9]+)\].*/\1/')
+          echo "NEW_VERSION=$VERSION" >> $GITHUB_ENV
       - name: Create tag
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git tag v${{ steps.increment.outputs.new_version }}
-          git push origin v${{ steps.increment.outputs.new_version }}
-
-      # ---------------------------------------
-      # Create GitHub Release
-      # ---------------------------------------
+          git tag v$NEW_VERSION
+          git push origin v$NEW_VERSION
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.increment.outputs.new_version }}
+          tag_name: v${{ env.NEW_VERSION }}
           generate_release_notes: true

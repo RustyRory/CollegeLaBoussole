@@ -23,11 +23,11 @@ jobs:
           echo ""
 
           # Regex pour les commits valides
-          REGEX="^(feat|feature|fix|docs|chore|refactor|test|hotfix)\([a-z0-9-]+\): Fixes #[0-9]+ - .+"
+          REGEX="^(feat|feature|fix|docs|chore|refactor|test|hotfix)\([a-z0-9-]+\): [Ff]ixes #[0-9]+ - .+"
 
           INVALID=0
 
-          # On récupère les commits depuis le dernier push (limitons à 50 pour performance)
+          # Récupère les 50 derniers messages de commit
           COMMITS=$(git log -n 50 --format=%s)
 
           for commit in $COMMITS; do
@@ -39,6 +39,7 @@ jobs:
 
             echo "➡️ Analyse: \"$commit\""
 
+            # Vérifie le format du commit
             if ! [[ "$commit" =~ $REGEX ]]; then
               echo ""
               echo "❌ Commit invalide détecté:"

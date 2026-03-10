@@ -22,13 +22,21 @@ jobs:
           echo "🔎 Vérification des messages de commit..."
           echo ""
 
+          # Regex pour les commits valides
           REGEX="^(feat|feature|fix|docs|chore|refactor|test|hotfix)\([a-z0-9-]+\): Fixes #[0-9]+ - .+"
 
           INVALID=0
 
-          COMMITS=$(git log -n 20 --format=%s)
+          # On récupère les commits depuis le dernier push (limitons à 50 pour performance)
+          COMMITS=$(git log -n 50 --format=%s)
 
-          for commit in "$COMMITS"; do
+          for commit in $COMMITS; do
+            # On ignore les merges de PR et les commits de release automatique
+            if [[ "$commit" =~ ^Merge\ pull\ request ]] || [[ "$commit" =~ ^chore\(release\) ]]; then
+              echo "➡️ Commit ignoré: \"$commit\""
+              continue
+            fi
+
             echo "➡️ Analyse: \"$commit\""
 
             if ! [[ "$commit" =~ $REGEX ]]; then

@@ -1,2 +1,2 @@
-echo "#!/bin/sh\nnpx lint-staged" > .husky/pre-commit
-chmod +x .husky/pre-commit
+#!/bin/sh
+npx lint-staged

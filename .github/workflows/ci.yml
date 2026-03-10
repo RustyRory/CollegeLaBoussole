@@ -1,11 +1,10 @@
-name: Test
+name: CI
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -18,7 +17,15 @@ jobs:
           node-version: 20
       - name: Install dependencies
         working-directory: collegeLaBoussoleApp/${{ matrix.dir }}
-        run: npm ci
-      - name: Run tests
+        run: npm ci --ignore-scripts
+      - name: Lint
+        working-directory: collegeLaBoussoleApp/${{ matrix.dir }}
+        run: |
+          npx eslint . --ext .ts,.js,.tsx,.jsx
+          npx prettier --check .
+      - name: Test
         working-directory: collegeLaBoussoleApp/${{ matrix.dir }}
         run: npm test
+      - name: Audit
+        working-directory: collegeLaBoussoleApp/${{ matrix.dir }}
+        run: npm audit --audit-level=high

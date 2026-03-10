@@ -7,26 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased]
-
-### Ajouté
-
--
-
-### Modifié
-
--
-
-### Corrigé
-
--
-
-### Supprimé
-
-- ***
-
----
-
 ## [0.1.0] - 2026-03-10
 
 ### Ajouté
@@ -52,3 +32,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Release & versioning
 - Documentation
   - workflow.md
+
+### Modifié
+
+-
+
+### Corrigé
+
+-
+
+### Supprimé
+
+- ***
+
+## [Unreleased]
+
+### Ajouté
+
+-
+
+### Modifié
+
+-
+
+### Corrigé
+
+-
+
+### Supprimé
+
+-

@@ -14,21 +14,29 @@ jobs:
         with:
           node-version: 20
 
+      # Installer Husky et lint-staged à la racine
+      - name: Install root dependencies
+        run: npm install
+
+      # Installer backend & frontend sans exécuter les scripts prepare
       - name: Install backend
         working-directory: collegeLaBoussoleApp/backend
-        run: npm install
+        run: npm install --ignore-scripts
 
       - name: Install frontend
         working-directory: collegeLaBoussoleApp/frontend
-        run: npm install
+        run: npm install --ignore-scripts
 
+      # Lint backend
       - name: ESLint backend
         working-directory: collegeLaBoussoleApp/backend
         run: npx eslint . --ext .js,.ts
 
+      # Lint frontend
       - name: ESLint frontend
         working-directory: collegeLaBoussoleApp/frontend
         run: npx eslint . --ext .js,.jsx,.ts,.tsx
 
+      # Prettier check
       - name: Prettier
         run: npx prettier --check .

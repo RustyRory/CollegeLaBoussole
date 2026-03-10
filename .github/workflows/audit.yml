@@ -14,14 +14,15 @@ jobs:
         with:
           node-version: 20
 
+      # Installer backend & frontend sans scripts
       - name: Backend audit
         run: |
           cd collegeLaBoussoleApp/backend
-          npm install
+          npm install --ignore-scripts
           npm audit --audit-level=high
 
       - name: Frontend audit
         run: |
           cd collegeLaBoussoleApp/frontend
-          npm install
+          npm install --ignore-scripts
           npm audit --audit-level=high

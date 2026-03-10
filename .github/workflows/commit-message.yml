@@ -1,7 +1,8 @@
+# commit-message.yml
 name: Commit Message Check
 
 on:
-  push:
+  pull_request:
     branches:
       - main
       - dev
@@ -22,16 +23,14 @@ jobs:
           echo "🔎 Vérification des messages de commit..."
           echo ""
 
-          # Regex pour les commits valides
-          REGEX="^(feat|feature|fix|docs|chore|refactor|test|hotfix)\([a-z0-9-]+\): [Ff]ixes #[0-9]+ - .+"
+          REGEX="^(feat|feature|fix|docs|chore|refactor|test|hotfix)\([a-z0-9-]+\): Fixes #[0-9]+ - .+"
 
           INVALID=0
 
-          # Récupère les 50 derniers messages de commit
-          COMMITS=$(git log -n 50 --format=%s)
+          # Récupérer les 50 derniers commits, ligne par ligne
+          git log -n 50 --format=%s | while IFS= read -r commit; do
 
-          for commit in $COMMITS; do
-            # On ignore les merges de PR et les commits de release automatique
+            # Ignorer merges et releases
             if [[ "$commit" =~ ^Merge\ pull\ request ]] || [[ "$commit" =~ ^chore\(release\) ]]; then
               echo "➡️ Commit ignoré: \"$commit\""
               continue
@@ -39,7 +38,6 @@ jobs:
 
             echo "➡️ Analyse: \"$commit\""
 
-            # Vérifie le format du commit
             if ! [[ "$commit" =~ $REGEX ]]; then
               echo ""
               echo "❌ Commit invalide détecté:"

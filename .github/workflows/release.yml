@@ -2,42 +2,82 @@ name: Release
 
 on:
   pull_request:
+    types: [closed] # On déclenche seulement quand une PR est fermée
     branches:
       - main
-    types: [closed] # Se déclenche uniquement quand la PR est fermée
 
 jobs:
   create-release:
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'dev'
     runs-on: ubuntu-latest
 
     steps:
+      # ---------------------------------------
+      # 1️⃣ Checkout repo
+      # ---------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Extract version from CHANGELOG
-        id: version
+      # ---------------------------------------
+      # 2️⃣ Récupérer dernier tag
+      # ---------------------------------------
+      - name: Get latest tag
+        id: get_tag
         run: |
-          VERSION=$(grep -m 1 "^## \[" CHANGELOG.md | sed -E 's/^## \[([0-9]+\.[0-9]+\.[0-9]+)\].*/\1/')
-          if [[ -z "$VERSION" || ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "❌ Version invalide ou introuvable dans CHANGELOG"
+          LATEST_TAG=$(git describe --tags --abbrev=0 origin/main 2>/dev/null || echo "v0.0.0")
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+          echo "Dernier tag sur main: $LATEST_TAG"
+
+      # ---------------------------------------
+      # 3️⃣ Incrémenter version mineure
+      # ---------------------------------------
+      - name: Increment minor version
+        id: increment
+        run: |
+          VERSION=${LATEST_TAG#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+          MINOR=$((MINOR + 1))
+          PATCH=0
+
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "🚀 Nouvelle version mineure: v$NEW_VERSION"
+
+      # ---------------------------------------
+      # 4️⃣ Extraire les notes du CHANGELOG
+      # ---------------------------------------
+      - name: Extract release notes from CHANGELOG
+        id: changelog
+        run: |
+          RELEASE_NOTES=$(awk "/^## \[$NEW_VERSION\]/ {flag=1; next} /^## \[/ {flag=0} flag" CHANGELOG.md)
+          if [ -z "$RELEASE_NOTES" ]; then
+            echo "❌ Pas de changelog trouvé pour v$NEW_VERSION"
             exit 1
           fi
-          echo "NEW_VERSION=$VERSION" >> $GITHUB_ENV
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "✅ Version détectée: $VERSION"
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$RELEASE_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "✅ Notes de release extraites"
 
-      - name: Create tag
+      # ---------------------------------------
+      # 5️⃣ Créer le tag Git
+      # ---------------------------------------
+      - name: Create Git tag
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
           git tag v${{ env.NEW_VERSION }}
           git push origin v${{ env.NEW_VERSION }}
 
+      # ---------------------------------------
+      # 6️⃣ Créer la release GitHub
+      # ---------------------------------------
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.NEW_VERSION }}
-          generate_release_notes: true
+          name: v${{ env.NEW_VERSION }}
+          body: ${{ env.RELEASE_NOTES }}

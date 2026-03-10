@@ -1,45 +1,27 @@
-name: 'Vérification du nom de la branche'
+name: Branch Name Check
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
+    types: [opened, synchronize, reopened]
 
 jobs:
-  branch-name-check:
+  branch-name:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Vérification du nom de la branche'
-        id: check_branch
+      - name: Validate branch name
         run: |
-          echo "PR branch: ${{ github.head_ref }}"
-
           BRANCH="${{ github.head_ref }}"
+          echo "Branch: $BRANCH"
 
-          # Regex pour les conventions
-          FEATURE_REGEX="^(feat|feature)/[0-9]+-[a-z0-9-]+$"
-          FIX_REGEX="^fix/[0-9]+-[a-z0-9-]+$"
-          HOTFIX_REGEX="^hotfix/[0-9]+-[a-z0-9-]+$"
-          RELEASE_REGEX="^release/[0-9]+\.[0-9]+\.[0-9]+$"
-
-          if [[ $BRANCH =~ $FEATURE_REGEX ]]; then
-            echo "✅ Nom de la branche valide (feature)"
-            exit 0
-          elif [[ $BRANCH =~ $FIX_REGEX ]]; then
-            echo "✅ Nom de la branche valide (fix)"
-            exit 0
-          elif [[ $BRANCH =~ $HOTFIX_REGEX ]]; then
-            echo "✅ Nom de la branche valide (hotfix)"
-            exit 0
-          elif [[ $BRANCH =~ $RELEASE_REGEX ]]; then
-            echo "✅ Nom de la branche valide (release)"
-            exit 0
-          else
-            echo "❌ Nom de la branche invalide: $BRANCH"
-            echo ""
-            echo "Le nom de la branche doit suivre la convention :"
-            echo "  feature/<issue-id>-description"
-            echo "  fix/<issue-id>-description"
-            echo "  hotfix/<issue-id>-description"
-            echo "  release/<x.y.z>"
+          if [[ ! "$BRANCH" =~ ^(feature|feat|fix|hotfix)/[0-9]+-[a-z0-9-]+$ && ! "$BRANCH" =~ ^(dev|main)$ ]]; then
+            echo "❌ Nom de branche invalide."
+            echo "Format attendu:"
+            echo "feature/123-description"
+            echo "feat/123-description"
+            echo "fix/123-description"
+            echo "hotfix/123-description"
+            echo "ou dev/main pour les branches principales"
             exit 1
           fi
+
+          echo "✅ Nom de branche valide."

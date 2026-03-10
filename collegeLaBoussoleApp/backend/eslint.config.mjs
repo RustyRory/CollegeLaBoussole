@@ -1,7 +1,5 @@
 // collegeLaBoussoleApp/backend/eslint.config.js
-import { defineConfig } from "eslint-define-config";
-
-export default defineConfig({
+export default {
   root: true,
   parser: "@typescript-eslint/parser",
   parserOptions: {
@@ -17,4 +15,4 @@ export default defineConfig({
     "prettier",
   ],
   ignorePatterns: ["node_modules/", "dist/"],
-});
+};

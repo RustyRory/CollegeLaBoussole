@@ -1,0 +1,11 @@
+feature:
+  - head-branch: ["feature/*"]
+
+bug:
+  - head-branch: ["fix/*"]
+
+hotfix:
+  - head-branch: ["hotfix/*"]
+
+release:
+  - head-branch: ["release/*"]

@@ -1,55 +1,28 @@
-name: 'Audit des dépendances npm Backend et Frontend'
+name: Security Audit
 
 on:
   pull_request:
-    types: [opened, edited, synchronize]
-  push:
-    branches:
-      - main
-      - dev
+    types: [opened, synchronize, reopened]
 
 jobs:
-  npm-audit:
+  audit:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18]
 
     steps:
-      - name: 'Checkout code'
-        uses: actions/checkout@v3
-
-      - name: 'Setup Node.js'
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
 
-      # ----------------------
-      # Backend audit
-      # ----------------------
-      - name: 'Installation des dépendances backend'
+      # Installer backend & frontend sans scripts
+      - name: Backend audit
         run: |
-          echo "Installation des dépendances backend"
-          cd app/backend
-          npm install
-
-      - name: "Lancement de l'audit npm backend"
-        run: |
-          echo "Audit des dépendances backend"
-          cd app/backend
+          cd collegeLaBoussoleApp/backend
+          npm install --ignore-scripts
           npm audit --audit-level=high
 
-      # ----------------------
-      # Frontend audit
-      # ----------------------
-      - name: 'Installation des dépendances frontend'
+      - name: Frontend audit
         run: |
-          echo "Installation des dépendances frontend"
-          cd app/frontend
-          npm install
-
-      - name: "Lancement de l'audit npm frontend"
-        run: |
-          echo "Audit des dépendances frontend"
-          cd app/frontend
+          cd collegeLaBoussoleApp/frontend
+          npm install --ignore-scripts
           npm audit --audit-level=high

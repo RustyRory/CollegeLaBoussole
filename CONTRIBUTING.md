@@ -1,6 +1,6 @@
 # Contribuer au projet
 
-Merci de ton intérêt pour ce projet 🎉  
+Merci de ton intérêt pour ce projet 🎉
 Ce document décrit les règles et bonnes pratiques à suivre pour contribuer efficacement.
 
 ## 📦 Présentation du projet

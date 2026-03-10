@@ -1,8 +1,0 @@
-{
-  "name": "frontend",
-  "version": "0.0.1",
-  "scripts": {
-    "test": "echo 'No frontend tests yet' && exit 0",
-    "build": "echo 'Frontend build placeholder' && exit 0"
-  }
-}

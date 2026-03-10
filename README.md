@@ -1,6 +1,6 @@
 # Collège La Boussole — Plateforme Web
 
-Site web et plateforme numérique du **Collège la boussole**.  
+Site web et plateforme numérique du **Collège la boussole**.
 Le projet vise à **structurer, moderniser et professionnaliser** la communication et la gestion des informations du collège.
 
 ---
@@ -82,7 +82,7 @@ Toute la **conception fonctionnelle et technique** est centralisée dans le doss
 
 ## 🚀 Installation & démarrage
 
-**Voir le guide** :  
+**Voir le guide** :
 [`INSTALL.md`](/INSTALL.md)
 
 Résumé rapide :

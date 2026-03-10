@@ -1,0 +1,16 @@
+#!/bin/sh
+
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+echo "🔎 Vérification branche: $BRANCH"
+
+if [[ ! "$BRANCH" =~ ^(feature|feat|fix|hotfix)/[0-9]+-[a-z0-9-]+$ ]]; then
+  echo "❌ Nom de branche invalide"
+  echo "Format attendu:"
+  echo "feature/123-description"
+  echo "fix/123-description"
+  echo "hotfix/123-description"
+  exit 1
+fi
+
+echo "✅ Nom de branche valide"

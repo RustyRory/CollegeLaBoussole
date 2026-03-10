@@ -1,4 +1,4 @@
-name: Tests
+name: Test
 
 on:
   pull_request:
@@ -7,22 +7,18 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        dir: [backend, frontend]
 
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      # Installer backend & frontend sans scripts
-      - name: Backend tests
-        run: |
-          cd collegeLaBoussoleApp/backend
-          npm install --ignore-scripts
-          npm test
-
-      - name: Frontend tests
-        run: |
-          cd collegeLaBoussoleApp/frontend
-          npm install --ignore-scripts
-          npm test
+      - name: Install dependencies
+        working-directory: collegeLaBoussoleApp/${{ matrix.dir }}
+        run: npm ci --ignore-scripts
+      - name: Run tests
+        working-directory: collegeLaBoussoleApp/${{ matrix.dir }}
+        run: npm test

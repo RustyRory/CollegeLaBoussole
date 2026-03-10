@@ -2,56 +2,82 @@ name: Release
 
 on:
   pull_request:
+    types: [closed] # On déclenche seulement quand une PR est fermée
     branches:
       - main
-    types: [opened, synchronize, reopened]
-  pull_request_target:
-    branches:
-      - main
-    types: [closed]
 
 jobs:
-  validate-release:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action != 'closed'
-    steps:
-      - uses: actions/checkout@v4
-      - name: Check CHANGELOG
-        run: |
-          if [ ! -f "CHANGELOG.md" ]; then
-            echo "❌ CHANGELOG.md manquant"
-            exit 1
-          fi
-      - name: Extract version
-        id: version
-        run: |
-          VERSION=$(grep -m 1 "^## \[" CHANGELOG.md | sed -E 's/^## \[([0-9]+\.[0-9]+\.[0-9]+)\].*/\1/')
-          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "❌ Version invalide"
-            exit 1
-          fi
-          echo "version=$VERSION" >> $GITHUB_ENV
-          echo "✅ Version détectée: $VERSION"
-
   create-release:
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref == 'dev'
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+
     steps:
-      - uses: actions/checkout@v4
+      # ---------------------------------------
+      # 1️⃣ Checkout repo
+      # ---------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Extract version
+
+      # ---------------------------------------
+      # 2️⃣ Récupérer dernier tag
+      # ---------------------------------------
+      - name: Get latest tag
+        id: get_tag
         run: |
-          VERSION=$(grep -m 1 "^## \[" CHANGELOG.md | sed -E 's/^## \[([0-9]+\.[0-9]+\.[0-9]+)\].*/\1/')
-          echo "NEW_VERSION=$VERSION" >> $GITHUB_ENV
-      - name: Create tag
+          LATEST_TAG=$(git describe --tags --abbrev=0 origin/main 2>/dev/null || echo "v0.0.0")
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+          echo "Dernier tag sur main: $LATEST_TAG"
+
+      # ---------------------------------------
+      # 3️⃣ Incrémenter version mineure
+      # ---------------------------------------
+      - name: Increment minor version
+        id: increment
+        run: |
+          VERSION=${LATEST_TAG#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+          MINOR=$((MINOR + 1))
+          PATCH=0
+
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "🚀 Nouvelle version mineure: v$NEW_VERSION"
+
+      # ---------------------------------------
+      # 4️⃣ Extraire les notes du CHANGELOG
+      # ---------------------------------------
+      - name: Extract release notes from CHANGELOG
+        id: changelog
+        run: |
+          RELEASE_NOTES=$(awk "/^## \[$NEW_VERSION\]/ {flag=1; next} /^## \[/ {flag=0} flag" CHANGELOG.md)
+          if [ -z "$RELEASE_NOTES" ]; then
+            echo "❌ Pas de changelog trouvé pour v$NEW_VERSION"
+            exit 1
+          fi
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
+          echo "$RELEASE_NOTES" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "✅ Notes de release extraites"
+
+      # ---------------------------------------
+      # 5️⃣ Créer le tag Git
+      # ---------------------------------------
+      - name: Create Git tag
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git tag v$NEW_VERSION
-          git push origin v$NEW_VERSION
+          git tag v${{ env.NEW_VERSION }}
+          git push origin v${{ env.NEW_VERSION }}
+
+      # ---------------------------------------
+      # 6️⃣ Créer la release GitHub
+      # ---------------------------------------
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.NEW_VERSION }}
-          generate_release_notes: true
+          name: v${{ env.NEW_VERSION }}
+          body: ${{ env.RELEASE_NOTES }}

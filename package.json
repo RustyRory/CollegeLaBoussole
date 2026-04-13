@@ -22,7 +22,7 @@
       "eslint --fix"
     ],
     "collegeLaBoussoleApp/frontend/**/*.{js,jsx,ts,tsx}": [
-      "eslint --config collegeLaBoussoleApp/frontend/.eslintrc.js --fix"
+      "eslint --config collegeLaBoussoleApp/frontend/eslint.config.mjs --fix"
     ],
     "*.{js,jsx,ts,tsx,json,md,yml,yaml}": [
       "prettier --write"

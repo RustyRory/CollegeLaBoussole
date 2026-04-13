@@ -37,7 +37,7 @@
     "eslint": "^9.39.4",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
-    "lint-staged": "^14.0.1",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.8.1"
   },
   "husky": {
@@ -249,7 +249,7 @@
     "nanoid": "^3.3.11",
     "napi-postinstall": "^0.3.4",
     "natural-compare": "^1.4.0",
-    "next": "^16.1.6",
+    "next": "16.2.3",
     "node-exports-info": "^1.6.0",
     "node-releases": "^2.0.36",
     "nodemon": "^3.1.14",

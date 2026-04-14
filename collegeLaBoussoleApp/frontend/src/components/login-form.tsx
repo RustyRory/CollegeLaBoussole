@@ -12,6 +12,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
 
 export function LoginForm({
   className,
@@ -60,7 +61,7 @@ export function LoginForm({
           <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <img
+                <Image
                   src="/assets/images/logo-light.svg"
                   alt="Collège La Boussole"
                   className="h-10 w-auto"
@@ -115,7 +116,7 @@ export function LoginForm({
 
           <div className="relative hidden bg-white md:block">
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center">
-              <img
+              <Image
                 src="/assets/images/logo.svg"
                 alt="Collège La Boussole"
                 className="h-20 w-auto"

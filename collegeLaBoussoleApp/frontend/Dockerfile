@@ -5,7 +5,7 @@ ARG NEXT_PUBLIC_API_URL="/collegelaboussole/api"
 ENV NEXT_BASE_PATH=$NEXT_BASE_PATH
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 COPY package*.json ./
-RUN npm ci --ignore-scripts
+RUN npm install --ignore-scripts
 COPY . .
 RUN npm run build
 

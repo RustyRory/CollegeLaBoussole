@@ -71,6 +71,14 @@ db.users.insertOne({
 | PATCH   | `/api/years/:id` | `{ "status": "archived" }`                                                                        | `200` année mise à jour                 |
 | DELETE  | `/api/years/:id` | —                                                                                                 | `204`                                   |
 
+<img src="./images/insomnia-post-years.png />
+
+<img src="./images/insomnia-get-years.png />
+
+<img src="./images/insomnia-patch-years-id.png />
+
+<img src="./images/insomnia-delete-years-id.png />
+
 ---
 
 ## 4. Classes _(nécessite un `yearId` et un `teacherId` valides)_
@@ -82,6 +90,14 @@ db.users.insertOne({
 | PATCH   | `/api/classes/:id` | `{ "name": "6ème B" }`                                        | `200` classe mise à jour                         |
 | DELETE  | `/api/classes/:id` | —                                                             | `204`                                            |
 
+<img src="./images/insomnia-post-years.png />
+
+<img src="./images/insomnia-get-years.png />
+
+<img src="./images/insomnia-patch-years-id.png />
+
+<img src="./images/insomnia-delete-years-id.png />
+
 ---
 
 ## 5. Lectures _(nécessite un `classId` et un `teacherId` valides)_
@@ -92,6 +108,14 @@ db.users.insertOne({
 | GET     | `/api/lectures`     | —                                                                                                                               | `200` liste avec `classId` et `teacherId` peuplés |
 | PATCH   | `/api/lectures/:id` | `{ "day": "mardi" }`                                                                                                            | `200` cours mis à jour                            |
 | DELETE  | `/api/lectures/:id` | —                                                                                                                               | `204`                                             |
+
+<img src="./images/insomnia-post-lectures.png />
+
+<img src="./images/insomnia-get-lectures.png />
+
+<img src="./images/insomnia-patch-lectures-id.png />
+
+<img src="./images/insomnia-delete-lectures-id.png />
 
 ---
 
@@ -106,6 +130,18 @@ db.users.insertOne({
 | PATCH   | `/api/documents/:id`           | `{ "titre": "Nouveau nom" }`                                                          | `200` document mis à jour                      |
 | DELETE  | `/api/documents/:id`           | —                                                                                     | `204`                                          |
 
+<img src="./images/insomnia-post-documents.png />
+
+<img src="./images/insomnia-get-documents.png />
+
+<img src="./images/insomnia-get-documents-folders-id.png />
+
+<img src="./images/insomnia-get-documents-id.png />
+
+<img src="./images/insomnia-patch-documents-id.png />
+
+<img src="./images/insomnia-delete-documents-id.png />
+
 ---
 
 ## 7. Groups
@@ -117,6 +153,16 @@ db.users.insertOne({
 | POST    | `/api/groups/:id/members`         | `{ "userId": "<id>" }`                            | `201` membre ajouté     |
 | DELETE  | `/api/groups/:id/members/:userId` | —                                                 | `204`                   |
 | DELETE  | `/api/groups/:id`                 | —                                                 | `204`                   |
+
+<img src="./images/insomnia-post-groups.png />
+
+<img src="./images/insomnia-get-groups.png />
+
+<img src="./images/insomnia-post-groups-members-id.png />
+
+<img src="./images/insomnia-delete-groups-members-id.png />
+
+<img src="./images/insomnia-delete-groups-id.png />
 
 ---
 

@@ -5,7 +5,13 @@ import nextTs from "eslint-config-next/typescript";
 export default defineConfig([
   ...nextVitals,
   ...nextTs,
-  // ignore files / folders spécifiques
+
+  {
+    rules: {
+      "@next/next/no-html-link-for-pages": "off",
+    },
+  },
+
   globalIgnores([
     ".next/**",
     "out/**",

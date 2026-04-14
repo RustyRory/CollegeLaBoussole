@@ -19,7 +19,7 @@
   },
   "lint-staged": {
     "collegeLaBoussoleApp/backend/**/*.{js,ts}": [
-      "eslint --fix"
+      "eslint --config collegeLaBoussoleApp/backend/eslint.config.mjs --fix"
     ],
     "collegeLaBoussoleApp/frontend/**/*.{js,jsx,ts,tsx}": [
       "eslint --config collegeLaBoussoleApp/frontend/eslint.config.mjs --fix"

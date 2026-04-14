@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [0.1.0] - 2026-03-10
+## [0.1.0] - 2026-04-13
 
 ### Ajouté
 
@@ -30,18 +30,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Pre-commit
     - Audit des dépendances
     - Release & versioning
+  - Deploiement Automatique vers env test (branche main)
+- Husky
+  - Precommit
+  - Prepush
 - Documentation
   - workflow.md
-
-### Modifié
-
--
-
-### Corrigé
-
--
-
-### Supprimé
+  - uml
+  - Cartographies
+  - Data conception
+  - Wireframes
 
 - ***
 

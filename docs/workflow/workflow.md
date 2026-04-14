@@ -26,9 +26,9 @@ Ce document décrit **pas à pas** la configuration des **Rulesets GitHub** afin
 
 ```
 feature/* → PR → dev
-dev → PR → main (vérification release)
+dev       → PR → main (vérification release)
 release/* → PR → main
-hotfix/* → PR → main → PRauto main → dev
+hotfix/*  → PR → main → PR auto main → dev
 ```
 
 ---
@@ -39,6 +39,7 @@ hotfix/* → PR → main → PRauto main → dev
 - GitHub Cloud
 - Utilisation des **Rulesets** (nouvelle interface GitHub)
 - Python + `pre-commit` pour validation locale
+- Docker + Docker Compose pour l'environnement local
 
 ---
 
@@ -240,7 +241,7 @@ hotfix/* → main via PR + patch automatique
 
 ---
 
-### Vérification de la présence d’une issue
+### Vérification de la présence d'une issue
 
 - `.github/workflows/ticket.yml`
 - Vérifie que le nom de PR ou de branche contient `#<numéro>`
@@ -261,12 +262,15 @@ hotfix/* → main via PR + patch automatique
 - `.github/workflows/commit-message.yml`
 - Format :
   ```
-  type(nom): Fixes#<issue> - message
+  type(scope): Fixes #<issue> - message
   ```
 - Blocage push/PR si non respecté
-- Exemple :
+- Exemples :
   ```
-  feat(login):Fixes#3 - Ajout page logindocs(readme):Fixes#6 - Mise à jour du READMEfix(api):Fixes#10 - Correction timeout APIhotfix(prod):Fixes#12 - Correction crash production
+  feat(login): Fixes #3 - Ajout page login
+  docs(readme): Fixes #6 - Mise à jour du README
+  fix(api): Fixes #10 - Correction timeout API
+  hotfix(prod): Fixes #12 - Correction crash production
   ```
 - **Ajout de logs explicatifs** pour guider le développeur
 
@@ -286,7 +290,8 @@ hotfix/* → main via PR + patch automatique
 - `.github/workflows/tests.yml`
 - Backend et frontend :
   ```bash
-  cd app/backend && npm install && npmtestcd ../frontend && npm install && npmtest
+  cd app/backend && npm install && npm test
+  cd ../frontend && npm install && npm test
   ```
 - Blocage PR si tests échouent
 
@@ -300,23 +305,6 @@ hotfix/* → main via PR + patch automatique
 
 ---
 
-### Pre-commit
-
-- Local : `.pre-commit-config.yaml`
-- Vérifie avant commit : lint, tests, structure, messages de commit
-- Installation :
-  ```bash
-  python3 -m venv .venvsource .venv/bin/activate# mac/linux
-  pip install pre-commit
-  pre-commit install
-  ```
-- Test :
-  ```bash
-  pre-commit run --all-files
-  ```
-
----
-
 ### Audit des dépendances
 
 - `.github/workflows/audit.yml`
@@ -327,7 +315,7 @@ hotfix/* → main via PR + patch automatique
 
 ### Hotfix & Release Automation
 
-### Hotfix
+#### Hotfix
 
 - `.github/workflows/hotfix-release.yml`
 - PR hotfix merge vers `main`
@@ -335,7 +323,7 @@ hotfix/* → main via PR + patch automatique
 - Tag & GitHub Release créés
 - PR automatique `main → dev` pour synchronisation
 
-### Release
+#### Release
 
 - `.github/workflows/release-validation.yml`
 - PR `dev → main`
@@ -345,15 +333,15 @@ hotfix/* → main via PR + patch automatique
 
 ---
 
-## ÉTAPE 11 — Pré-commit (Validation locale avant push)
+## Pre-commit – Validation locale avant push
 
-### Qu’est-ce que `pre-commit` ?
+### Qu'est-ce que `pre-commit` ?
 
 `pre-commit` est un outil qui exécute automatiquement des vérifications avant chaque commit Git.
 
-Il permet de s’assurer que le code respecte le **workflow**, les **standards de commit**, la **structure du projet**, le **linting**, les **tests**, et même la **sécurité des dépendances** avant d’envoyer des changements sur une branche distante.
+Il permet de s'assurer que le code respecte le **workflow**, les **standards de commit**, la **structure du projet**, le **linting**, les **tests**, et même la **sécurité des dépendances** avant d'envoyer des changements sur une branche distante.
 
-> Cela permet de détecter les erreurs **avant** qu’elles n’atteignent `dev` ou `main`.
+> Cela permet de détecter les erreurs **avant** qu'elles n'atteignent `dev` ou `main`.
 
 ---
 
@@ -362,7 +350,8 @@ Il permet de s’assurer que le code respecte le **workflow**, les **standards d
 1. Créer un environnement Python pour isoler pre-commit :
 
 ```bash
-python3 -m venv .venvsource .venv/bin/activate# mac/linux
+python3 -m venv .venv
+source .venv/bin/activate  # mac/linux
 ```
 
 2. Installer pre-commit :
@@ -379,6 +368,12 @@ pre-commit install
 
 - Cela ajoute un hook dans `.git/hooks/pre-commit`.
 - Tous les développeurs du projet auront les mêmes validations.
+
+4. Tester sur tous les fichiers :
+
+```bash
+pre-commit run --all-files
+```
 
 ---
 
@@ -407,7 +402,7 @@ git add .
 2. Faire le commit :
 
 ```bash
-git commit -m"feat(login): Fixes #12 - Ajout page login"
+git commit -m "feat(login): Fixes #12 - Ajout page login"
 ```
 
 3. Déclenchement automatique :
@@ -415,6 +410,111 @@ git commit -m"feat(login): Fixes #12 - Ajout page login"
    - Si un hook échoue, le commit est **bloqué**.
    - Un message clair explique **quoi corriger**.
 4. Si tout passe, le commit est accepté et peut être poussé vers le repository.
+
+---
+
+# Docker – Environnement local et CI/CD
+
+## Objectif
+
+Utiliser Docker pour garantir un **environnement identique** entre les postes de développement, la CI et la production.
+
+---
+
+## Structure Docker
+
+```
+/
+├── docker-compose.yml          # Orchestration locale (dev)
+├── docker-compose.prod.yml     # Orchestration production
+├── app/
+│   ├── backend/
+│   │   └── Dockerfile
+│   └── frontend/
+│       └── Dockerfile
+```
+
+---
+
+## Lancement de l'environnement local
+
+```bash
+# Construire et démarrer tous les services
+docker compose up --build
+
+# En arrière-plan
+docker compose up --build -d
+
+# Arrêter les services
+docker compose down
+
+# Arrêter et supprimer les volumes
+docker compose down -v
+```
+
+---
+
+## Commandes utiles
+
+```bash
+# Voir les logs d'un service
+docker compose logs backend
+docker compose logs frontend
+
+# Accéder au shell d'un conteneur
+docker compose exec backend sh
+docker compose exec frontend sh
+
+# Relancer un seul service
+docker compose restart backend
+
+# Reconstruire uniquement un service
+docker compose build backend
+```
+
+---
+
+## Variables d'environnement
+
+Copier le fichier d'exemple avant de démarrer :
+
+```bash
+cp .env.example .env
+```
+
+> Ne jamais committer `.env` — il est listé dans `.gitignore`.
+
+---
+
+## Docker dans la CI/CD (GitHub Actions)
+
+Le workflow CI/CD utilise Docker pour construire et tester les images avant tout merge.
+
+- `.github/workflows/docker-build.yml`
+- Déclenché sur chaque PR vers `dev` ou `main`
+- Étapes :
+  1. Build de l'image backend
+  2. Build de l'image frontend
+  3. Lancement des tests dans les conteneurs
+  4. Push de l'image sur le registre (seulement sur `main`)
+
+```yaml
+- name: Build backend image
+  run: docker build -t backend:${{ github.sha }} ./app/backend
+
+- name: Run backend tests
+  run: docker run --rm backend:${{ github.sha }} npm test
+```
+
+---
+
+## Bonnes pratiques Docker
+
+- ✅ Utiliser des **images légères** (`node:alpine`)
+- ✅ Séparer les stages (`builder` vs `runner`) avec le **multi-stage build**
+- ✅ Ne pas stocker de secrets dans les images
+- ✅ Utiliser `.dockerignore` pour exclure `node_modules`, `.env`, etc.
+- ❌ Ne jamais exposer le port de la base de données en production
 
 ---
 
@@ -426,14 +526,15 @@ git commit -m"feat(login): Fixes #12 - Ajout page login"
 - Hotfix → patch automatique
 - Release → version mineure automatique
 - Fichiers obligatoires présents
+- Environnement local via Docker uniquement
 
 ---
 
-# Diagramme visuel (mis à jour)
+# Diagramme visuel
 
 ```
            ┌───────────────┐
-           │ Issue github  │
+           │ Issue GitHub  │
            └─────┬─────────┘
                  │
                  ▼
@@ -469,20 +570,22 @@ git commit -m"feat(login): Fixes #12 - Ajout page login"
                  ▼
           ┌─────────────┐
           │ PR mergée   │
-          │ sur main    │
+          │ sur dev     │
           └──────┬──────┘
                  │
                  ▼
-        ┌─────────────────────┐
-        │ Hotfix → patch + PR │
-        │ main → dev           │
-        └─────────┬───────────┘
+          ┌─────────────┐
+          │ PR dev →    │
+          │ main        │
+          └──────┬──────┘
                  │
-                 ▼
-       ┌─────────────────────┐
-       │ Release → version   │
-       │ mineure x.y+1.0     │
-       └─────────────────────┘
+        ┌────────┴────────────┐
+        │                     │
+        ▼                     ▼
+┌──────────────────┐  ┌─────────────────────┐
+│ Hotfix → patch   │  │ Release → version   │
+│ + PR main → dev  │  │ mineure x.y+1.0     │
+└──────────────────┘  └─────────────────────┘
 ```
 
 ---

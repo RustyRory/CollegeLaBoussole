@@ -12,40 +12,53 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import Image from "next/image";
 
-export function LoginForm({
+export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [role, setRole] = useState("staff");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    if (password.length < 8) {
+      setError("Le mot de passe doit contenir au moins 8 caractères");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Les mots de passe ne correspondent pas");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ email, password, role }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.message ?? "Erreur de connexion");
+        setError(data.message ?? "Erreur lors de la création du compte");
         return;
       }
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.role);
-      localStorage.setItem("email", email);
       router.push("/dashboard");
     } catch {
       setError("Impossible de contacter le serveur");
@@ -61,13 +74,13 @@ export function LoginForm({
           <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <Image
+                <img
                   src="/assets/images/logo-light.svg"
                   alt="Collège La Boussole"
                   className="h-10 w-auto"
                 />
                 <p className="text-balance text-sm text-zinc-500 dark:text-zinc-400">
-                  Connectez-vous à votre espace
+                  Créer un nouveau compte
                 </p>
               </div>
 
@@ -82,41 +95,81 @@ export function LoginForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="college@laboussole.fr"
+                  placeholder="prenom.nom@college.fr"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+                <FieldDescription>
+                  Adresse email professionnelle du membre du personnel.
+                </FieldDescription>
               </Field>
 
               <Field>
-                <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
+                <div className="grid grid-cols-2 gap-4">
+                  <Field>
+                    <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
+                    <Input
+                      id="password"
+                      type="password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </Field>
+                  <Field>
+                    <FieldLabel htmlFor="confirm-password">
+                      Confirmation
+                    </FieldLabel>
+                    <Input
+                      id="confirm-password"
+                      type="password"
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                  </Field>
                 </div>
-                <Input
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+                <FieldDescription>8 caractères minimum.</FieldDescription>
+              </Field>
+
+              <Field>
+                <FieldLabel htmlFor="role">Rôle</FieldLabel>
+                <select
+                  id="role"
+                  value={role}
+                  onChange={(e) => setRole(e.target.value)}
+                  className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-300 dark:border-zinc-600 dark:bg-zinc-800 dark:text-white"
+                >
+                  <option value="staff">Staff</option>
+                  <option value="admin">Admin</option>
+                  <option value="parent">Parent</option>
+                  <option value="student">Élève</option>
+                  <option value="other">Autre</option>
+                </select>
               </Field>
 
               <Field>
                 <Button type="submit" disabled={loading}>
-                  {loading ? "Connexion..." : "Se connecter"}
+                  {loading ? "Création..." : "Créer le compte"}
                 </Button>
               </Field>
 
               <FieldDescription className="text-center text-xs">
-                Accès réservé au personnel du collège.
+                Déjà un compte ?{" "}
+                <a
+                  href="/login"
+                  className="underline underline-offset-2 hover:text-zinc-900 dark:hover:text-white"
+                >
+                  Se connecter
+                </a>
               </FieldDescription>
             </FieldGroup>
           </form>
 
           <div className="relative hidden bg-white md:block">
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center">
-              <Image
+              <img
                 src="/assets/images/logo.svg"
                 alt="Collège La Boussole"
                 className="h-20 w-auto"
@@ -130,7 +183,7 @@ export function LoginForm({
       </Card>
 
       <FieldDescription className="px-6 text-center text-xs">
-        En vous connectant, vous acceptez les{" "}
+        En créant un compte, vous acceptez les{" "}
         <a
           href="#"
           className="underline underline-offset-2 hover:text-zinc-900 dark:hover:text-white"

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SiteHeader } from "@/components/dashboard/site-header";
+import { SiteHeader } from "@/components/dashboard/dashboard-header";
 import { Button } from "@/components/ui/button";
 import { Modal } from "@/components/ui/modal";
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";

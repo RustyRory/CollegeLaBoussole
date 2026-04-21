@@ -10,9 +10,7 @@ export default function Home() {
         <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-8 max-w-3xl">
           Un collège à taille humaine, qui redonne du sens à l'apprentissage.
         </h1>
-        <Button asChild className="mb-16">
-          Découvrir le projet
-        </Button>
+        <Button className="mb-16">Découvrir le projet</Button>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
           <div className="flex flex-col gap-4">
@@ -146,7 +144,7 @@ export default function Home() {
           <h2 className="text-2xl font-bold mb-6">
             Maintenant que vous nous connaissez, avançons ensemble.
           </h2>
-          <Button asChild>S'inscrire</Button>
+          <Button>S'inscrire</Button>
         </div>
       </section>
     </div>

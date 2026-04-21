@@ -62,8 +62,10 @@ export function LoginForm({
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
                 <Image
-                  src="/assets/images/logo-light.svg"
+                  src="/images/logo.svg"
                   alt="Collège La Boussole"
+                  width={100}
+                  height={40}
                   className="h-10 w-auto"
                 />
                 <p className="text-balance text-sm text-zinc-500 dark:text-zinc-400">
@@ -117,9 +119,11 @@ export function LoginForm({
           <div className="relative hidden bg-white md:block">
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center">
               <Image
-                src="/assets/images/logo.svg"
+                src="/images/logo.svg"
                 alt="Collège La Boussole"
                 className="h-20 w-auto"
+                width={100}
+                height={100}
               />
               <p className="text-sm text-zinc-400">
                 Plateforme numérique du Collège La Boussole

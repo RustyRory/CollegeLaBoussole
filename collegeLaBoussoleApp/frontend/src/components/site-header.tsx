@@ -49,9 +49,7 @@ export function Navbar({ items }: { items: NavItem[] }) {
         {/* Actions */}
         <div className="flex items-center gap-3">
           {/* Si 'variant' cause toujours une erreur, essaie sans pour tester */}
-          <Button variant="ghost" className="hidden sm:flex text-zinc-900">
-            Connexion
-          </Button>
+          <Button className="hidden sm:flex text-zinc-900">Connexion</Button>
           <Button className="bg-green-800 hover:bg-green-900 text-white">
             S'inscrire
           </Button>

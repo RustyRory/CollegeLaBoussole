@@ -66,7 +66,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
               <Link href="/dashboard">
                 <div className="flex items-center gap-2">
                   <Image
-                    src="/assets/images/logo.svg"
+                    src="/images/logo.svg"
                     alt="La Boussole"
                     width={120}
                     height={32}
@@ -74,7 +74,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
                     priority
                   />
                   <Image
-                    src="/assets/images/logo-light.svg"
+                    src="/images/logo-light.svg"
                     alt="La Boussole"
                     width={120}
                     height={32}

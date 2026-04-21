@@ -84,7 +84,7 @@ export default function SiteFooter() {
 
           <div className="flex gap-4">
             <Link
-              href="#"
+              href="/mentions-legales"
               className="text-xs text-gray-400 hover:text-zinc-700 transition-colors"
             >
               Mentions légales

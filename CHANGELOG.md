@@ -7,6 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.3.0] - 2026-04-21
+
+### Ajouté
+
+- Site vitrine public (route group `(public)` avec layout partagé)
+  - Layout public avec header et footer automatiques sur toutes les pages
+  - Page d'accueil (`/`) — hero, pédagogie, statistiques, encadrement, partenaires, FAQ, CTA
+  - Page Le collège (`/college`) — hero, histoire & projet éducatif, valeurs, chiffres, équipe, partenariats, CTA
+  - Page Pédagogie (`/pedagogie`) — hero, méthodes pédagogiques, approche détaillée alternée, statistiques, CTA
+  - Page Faire un don (`/don`) — hero avec lien HelloAsso, statistiques donateurs, projets financés, avantages fiscaux (66%), CTA
+  - Page Contact (`/contact`) — formulaire de contact (nom, email, message), cartes d'information, CTA
+  - Page Mentions légales (`/mentions-legales`) — 7 sections légales obligatoires (éditeur, hébergement, propriété intellectuelle, RGPD, cookies, responsabilité, liens)
+- Composant `SiteHeader` — navbar sticky publique avec liens de navigation et bouton connexion
+- Composant `SiteFooter` — footer avec logo, navigation, coordonnées, réseaux sociaux, liens légaux
+- Composant `ContactForm` — formulaire client avec gestion d'état et appel API
+- Composants réutilisables `home/stat-card` et `home/faq-item`
+- Fichier `.env.example` dans le backend
+
+### Modifié
+
+- Renommage des composants en kebab-case (`accueil-form.tsx` → `home-page.tsx`, `statCard.tsx` → `stat-card.tsx`, `faqItem.tsx` → `faq-item.tsx`)
+- Réorganisation du dossier `homePage/` → `home/`
+- Architecture App Router restructurée avec route group `(public)` séparant les pages publiques du dashboard
+- Correction du chemin des logos (`/assets/images/` → `/images/`) dans `login-form.tsx` et `app-sidebar.tsx`
+- Règle ESLint `react/no-unescaped-entities` désactivée pour le frontend (projet en français)
+- Script `prepare` mis à jour (`husky install` → `husky`)
+
+### Corrigé
+
+- Suppression des dépendances Linux spécifiques (`lightningcss-linux-x64-gnu`, `lightningcss-linux-x64-musl`) du `package.json` racine — rendait `npm install` impossible sur Windows
+- Correction des entités HTML `&apos` (sans point-virgule) dans `home-page.tsx` remplacées par des apostrophes directes
+- Correction du composant `Button` — `Slot.Root` remplacé par `Slot` (`@radix-ui/react-slot`)
+
+---
+
 ## [0.2.0] - 2026-04-14
 
 ### Ajouté

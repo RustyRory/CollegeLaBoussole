@@ -24,7 +24,7 @@ jobs:
 
             # Pull latest code
             if [ -d "$REPO_DIR/.git" ]; then
-              git -C "$REPO_DIR" pull origin main
+              git -C "$REPO_DIR" pull origin staging
             else
               git clone https://github.com/${{ github.repository }}.git "$REPO_DIR"
             fi

@@ -2,8 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 const NAV_LINKS = [
+  { label: "Accueil", href: "/" },
   { label: "Le collège", href: "/college" },
   { label: "Pédagogie", href: "/pedagogie" },
+  { label: "Faire un don", href: "/don" },
   { label: "Contact", href: "/contact" },
 ];
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { SiteHeader } from "@/components/dashboard/site-header";
+import { SiteHeader } from "@/components/dashboard/dashboard-header";
 import { SectionCards } from "@/components/dashboard/section-cards";
 import { apiFetch } from "@/lib/api";
 

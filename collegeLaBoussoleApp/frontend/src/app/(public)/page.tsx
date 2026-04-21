@@ -1,8 +1,8 @@
 "use client";
 
 import HomePage from "@/components/home-page";
-import { Navbar } from "@/components/dashboard/nav-main";
 import { IconHome, IconLayoutDashboard } from "@tabler/icons-react";
+import { Navbar } from "@/components/site-header";
 
 export default function App() {
   const menuItems = [

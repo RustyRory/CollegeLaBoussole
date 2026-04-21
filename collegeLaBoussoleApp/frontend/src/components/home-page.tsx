@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
-import StatCard from "@/components/homePage/statCard";
-import FaqItem from "@/components/homePage/faqItem";
+import StatCard from "@/components/home/stat-card";
+import FaqItem from "@/components/home/faq-item";
 
 export default function Home() {
   return (
@@ -8,20 +8,18 @@ export default function Home() {
       {/* 1. HERO SECTION */}
       <section className="px-6 py-20 flex flex-col items-center text-center max-w-5xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-8 max-w-3xl">
-          Un collège à taille humaine, qui redonne du sens à
-          l&aposapprentissage.
+          Un collège à taille humaine, qui redonne du sens à l'apprentissage.
         </h1>
         <Button asChild className="mb-16">
           Découvrir le projet
         </Button>
 
-        {/* Les 2 grandes images du haut */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
           <div className="flex flex-col gap-4">
             <div className="aspect-video bg-amber-100 rounded-2xl flex items-center justify-center">
               <span className="text-amber-600 text-3xl">🖼️</span>
             </div>
-            <h3 className="font-semibold text-left">Texte d&aposaccroche 1</h3>
+            <h3 className="font-semibold text-left">Texte d'accroche 1</h3>
             <p className="text-sm text-gray-500 text-left">
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio,
               ad maxime saepe hic vitae fugiat repellendus magni? Aspernatur
@@ -32,7 +30,7 @@ export default function Home() {
             <div className="aspect-video bg-amber-100 rounded-2xl flex items-center justify-center">
               <span className="text-amber-600 text-3xl">🖼️</span>
             </div>
-            <h3 className="font-semibold text-left">Texte l &aposaccroche 2</h3>
+            <h3 className="font-semibold text-left">Texte l'accroche 2</h3>
             <p className="text-sm text-gray-500 text-left">
               Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio,
               ad maxime saepe hic vitae fugiat repellendus magni? Aspernatur
@@ -46,12 +44,12 @@ export default function Home() {
       <section className="bg-[#FAF7F2] py-20 px-6">
         <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
           <h2 className="text-3xl font-bold mb-8">
-            Une pédagogie innovante pour les élèves d&aposaujourd&aposhui
+            Une pédagogie innovante pour les élèves d'aujourd'hui
           </h2>
           <div className="bg-amber-100/50 p-8 rounded-3xl w-full flex flex-col md:flex-row items-center gap-8 text-left mb-8">
             <div className="flex-1">
               <h3 className="text-xl font-semibold mb-4">
-                Garder l&aposélève au cœur de son apprentissage
+                Garder l'élève au cœur de son apprentissage
               </h3>
               <p className="text-gray-600 mb-4">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo
@@ -79,7 +77,7 @@ export default function Home() {
           Des résultats probants qui parlent de nous-mêmes
         </h2>
         <p className="text-gray-500 mb-12">
-          Découvrez en chiffres l&aposimpact de notre accompagnement.
+          Découvrez en chiffres l'impact de notre accompagnement.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
           <StatCard number="99%" label="Taux de réussite" description="" />
@@ -91,7 +89,7 @@ export default function Home() {
           <StatCard
             number="180+"
             label="Élèves accompagnés"
-            description="Depuis la création de l&aposétablissement."
+            description="Depuis la création de l'établissement."
           />
           <StatCard
             number="75%"
@@ -148,7 +146,7 @@ export default function Home() {
           <h2 className="text-2xl font-bold mb-6">
             Maintenant que vous nous connaissez, avançons ensemble.
           </h2>
-          <Button asChild>S&aposinscrire</Button>
+          <Button asChild>S'inscrire</Button>
         </div>
       </section>
     </div>

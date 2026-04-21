@@ -15,7 +15,7 @@
     "prettier": "npm run prettier:frontend && npm run prettier:backend",
     "prettier:frontend": "cd collegeLaBoussoleApp/frontend && npx prettier --check .",
     "prettier:backend": "cd collegeLaBoussoleApp/backend && npx prettier --check .",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "lint-staged": {
     "collegeLaBoussoleApp/backend/**/*.{js,ts}": [
@@ -228,8 +228,6 @@
     "language-tags": "^1.0.9",
     "levn": "^0.4.1",
     "lightningcss": "^1.31.1",
-    "lightningcss-linux-x64-gnu": "^1.31.1",
-    "lightningcss-linux-x64-musl": "^1.31.1",
     "listr2": "^9.0.5",
     "locate-path": "^6.0.0",
     "lodash.merge": "^4.6.2",

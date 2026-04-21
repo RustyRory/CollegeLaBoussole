@@ -15,7 +15,7 @@
     "prettier": "npm run prettier:frontend && npm run prettier:backend",
     "prettier:frontend": "cd collegeLaBoussoleApp/frontend && npx prettier --check .",
     "prettier:backend": "cd collegeLaBoussoleApp/backend && npx prettier --check .",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "lint-staged": {
     "collegeLaBoussoleApp/backend/**/*.{js,ts}": [

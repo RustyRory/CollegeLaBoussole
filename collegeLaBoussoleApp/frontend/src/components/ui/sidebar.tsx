@@ -557,33 +557,27 @@ function SidebarMenuSkeleton({
   showIcon = false,
   ...props
 }: React.ComponentProps<"div"> & { showIcon?: boolean }) {
-  function SidebarMenuSkeleton({
-    className,
-    showIcon = false,
-    ...props
-  }: React.ComponentProps<"div"> & { showIcon?: boolean }) {
-    const [width, setWidth] = React.useState("70%");
+  const [width, setWidth] = React.useState("70%");
 
-    React.useEffect(() => {
-      setWidth(`${Math.floor(Math.random() * 40) + 50}%`);
-    }, []);
+  React.useEffect(() => {
+    setWidth(`${Math.floor(Math.random() * 40) + 50}%`);
+  }, []);
 
-    return (
+  return (
+    <div
+      data-slot="sidebar-menu-skeleton"
+      className={cn("flex h-8 items-center gap-2 rounded-md px-2", className)}
+      {...props}
+    >
+      {showIcon && (
+        <div className="bg-sidebar-accent size-4 shrink-0 animate-pulse rounded-md" />
+      )}
       <div
-        data-slot="sidebar-menu-skeleton"
-        className={cn("flex h-8 items-center gap-2 rounded-md px-2", className)}
-        {...props}
-      >
-        {showIcon && (
-          <div className="bg-sidebar-accent size-4 shrink-0 animate-pulse rounded-md" />
-        )}
-        <div
-          className="bg-sidebar-accent h-4 max-w-[--skeleton-width] flex-1 animate-pulse rounded-md"
-          style={{ "--skeleton-width": width } as React.CSSProperties}
-        />
-      </div>
-    );
-  }
+        className="bg-sidebar-accent h-4 max-w-[--skeleton-width] flex-1 animate-pulse rounded-md"
+        style={{ "--skeleton-width": width } as React.CSSProperties}
+      />
+    </div>
+  );
 }
 
 function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">) {

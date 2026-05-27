@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -20,10 +21,13 @@ export function Sidebar() {
   return (
     <aside className="flex h-full w-60 flex-col border-r border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
       <div className="flex h-16 items-center border-b border-zinc-200 px-4 dark:border-zinc-700">
-        <img
+        <Image
           src="/assets/images/logo-light.svg"
           alt="Collège La Boussole"
+          width={120}
+          height={28}
           className="h-7 w-auto"
+          unoptimized
         />
       </div>
 

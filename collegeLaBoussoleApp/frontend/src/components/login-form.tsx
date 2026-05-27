@@ -67,6 +67,7 @@ export function LoginForm({
                   width={100}
                   height={40}
                   className="h-10 w-auto"
+                  unoptimized
                 />
                 <p className="text-balance text-sm text-zinc-500 dark:text-zinc-400">
                   Connectez-vous à votre espace
@@ -124,6 +125,7 @@ export function LoginForm({
                 className="h-20 w-auto"
                 width={100}
                 height={100}
+                unoptimized
               />
               <p className="text-sm text-zinc-400">
                 Plateforme numérique du Collège La Boussole

@@ -27,6 +27,7 @@ export default function SiteHeader() {
             width={80}
             height={32}
             className="h-8 w-auto"
+            unoptimized
           />
         </Link>
 

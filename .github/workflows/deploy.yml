@@ -17,16 +17,18 @@ jobs:
     steps:
       - name: Trigger update via vps-monitor
         run: |
-          curl -sf -c cookies.txt \
+          LOGIN=$(curl -s -c cookies.txt \
             -X POST "${{ secrets.VPS_MONITOR_URL }}/auth/login" \
             -H "Content-Type: application/json" \
-            -d '{"username":"${{ secrets.VPS_MONITOR_USER }}","password":"${{ secrets.VPS_MONITOR_PASS }}"}' \
-            | grep -q '"ok":true' || { echo "Échec login vps-monitor"; exit 1; }
+            -d '{"username":"${{ secrets.VPS_MONITOR_USER }}","password":"${{ secrets.VPS_MONITOR_PASS }}"}')
+          echo "Login response: $LOGIN"
+          echo "$LOGIN" | grep -q '"ok":true' || { echo "Échec login vps-monitor"; exit 1; }
 
-          curl -sf -b cookies.txt \
+          UPDATE=$(curl -s -b cookies.txt \
             -X POST "${{ secrets.VPS_MONITOR_URL }}/api/deploy/update" \
             -H "Content-Type: application/json" \
-            -d '{"name":"CollegeLaBoussole"}' \
-            | grep -q '"ok":true' || { echo "Échec update vps-monitor"; exit 1; }
+            -d '{"name":"CollegeLaBoussole"}')
+          echo "Update response: $UPDATE"
+          echo "$UPDATE" | grep -q '"ok":true' || { echo "Échec update vps-monitor"; exit 1; }
 
           echo "Déploiement déclenché : http://78.138.58.95/collegelaboussole/"

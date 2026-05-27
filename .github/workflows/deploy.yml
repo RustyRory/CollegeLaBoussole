@@ -1,18 +1,32 @@
-name: Deploy
+name: Deploy to VPS
 
 on:
   push:
     branches:
       - staging
 
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: true
+
 jobs:
   deploy:
+    name: Déploiement CollegeLaBoussole — staging
     runs-on: ubuntu-latest
 
     steps:
-      - name: Trigger deploy via vps-monitor
+      - name: Trigger update via vps-monitor
         run: |
-          curl -f -sS -X POST "${{ secrets.VPS_MONITOR_URL }}/api/webhook/deploy" \
+          curl -sf -c cookies.txt \
+            -X POST "${{ secrets.VPS_MONITOR_URL }}/auth/login" \
             -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.VPS_MONITOR_WEBHOOK_SECRET }}" \
-            -d '{"name":"CollegeLaBoussole"}'
+            -d '{"username":"${{ secrets.VPS_MONITOR_USER }}","password":"${{ secrets.VPS_MONITOR_PASS }}"}' \
+            | grep -q '"ok":true' || { echo "Échec login vps-monitor"; exit 1; }
+
+          curl -sf -b cookies.txt \
+            -X POST "${{ secrets.VPS_MONITOR_URL }}/api/deploy/update" \
+            -H "Content-Type: application/json" \
+            -d '{"name":"CollegeLaBoussole"}' \
+            | grep -q '"ok":true' || { echo "Échec update vps-monitor"; exit 1; }
+
+          echo "Déploiement déclenché : http://78.138.58.95/collegelaboussole/"

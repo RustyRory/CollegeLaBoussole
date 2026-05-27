@@ -122,7 +122,8 @@
     @apply bg-background text-foreground;
   }
 
-  h1 {
+  h1,
+  .fraunces {
     font-family: var(--font-fraunces);
     font-weight: 500;
     font-variation-settings:
@@ -134,9 +135,37 @@
   }
 
   h1 em,
-  h1 i {
+  h1 i,
+  .fraunces em,
+  .fraunces i {
     font-style: italic;
     font-size: 1.07em;
     letter-spacing: -0.087em;
   }
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-track {
+  animation: ticker 30s linear infinite;
+}
+
+@keyframes ticker-slow {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-25%);
+  }
+}
+
+.ticker-track-slow {
+  animation: ticker-slow 40s linear infinite;
 }

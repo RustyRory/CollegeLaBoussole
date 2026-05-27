@@ -97,7 +97,8 @@ export default function SiteFooter() {
 
         <div className="mt-6 pt-6 border-t border-[#E0D9CF] text-center">
           <p className="text-xs text-[#1C1410]/50">
-            © {new Date().getFullYear()} Collège La Boussole. Tous droits réservés.
+            © {new Date().getFullYear()} Collège La Boussole. Tous droits
+            réservés.
           </p>
         </div>
       </div>

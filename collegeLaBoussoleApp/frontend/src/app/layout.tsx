@@ -20,7 +20,8 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   title: "Collège La Boussole",
-  description: "Un collège à taille humaine qui redonne du sens à l'apprentissage.",
+  description:
+    "Un collège à taille humaine qui redonne du sens à l'apprentissage.",
 };
 
 export default function RootLayout({

@@ -64,12 +64,11 @@ export default function PedagogieSection() {
         <h2 className="fraunces text-4xl md:text-5xl">
           Découvrez notre pédagogie
           <br />
-          ancrée dans{" "}
-          <em className="text-[#C85A2A]">l'action et le vivant</em>
+          ancrée dans <em className="text-[#C85A2A]">l'action et le vivant</em>
         </h2>
         <p className="mt-4 text-base text-[#1C1410]/60 max-w-xl leading-relaxed">
-          À La Boussole, chaque élève apprend à son rythme, avec son corps,
-          dans un cadre structuré et bienveillant.
+          À La Boussole, chaque élève apprend à son rythme, avec son corps, dans
+          un cadre structuré et bienveillant.
         </p>
       </div>
 
@@ -126,8 +125,8 @@ export default function PedagogieSection() {
           <div className="absolute bottom-4 left-4 right-4">
             <div className="bg-[#1E3A2F] rounded-xl px-4 py-3">
               <p className="text-sm text-white/80 leading-relaxed italic">
-                « L'enfant retrouve le sens d'apprendre par le réel, le corps
-                et la bienveillance. »
+                « L'enfant retrouve le sens d'apprendre par le réel, le corps et
+                la bienveillance. »
               </p>
             </div>
           </div>

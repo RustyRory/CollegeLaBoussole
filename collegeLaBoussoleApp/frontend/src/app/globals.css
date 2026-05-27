@@ -4,7 +4,10 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: oklch(0.956 0.012 65);
+  --clb-cream: #F5F0E8;
+  --clb-brown: #1C1410;
+  --clb-orange: #C85A2A;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -117,5 +120,20 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  h1 {
+    font-family: var(--font-fraunces);
+    font-weight: 500;
+    font-variation-settings: 'opsz' 77, 'SOFT' 100, 'WONK' 0;
+    line-height: 0.9;
+    letter-spacing: -0.077em;
+  }
+
+  h1 em,
+  h1 i {
+    font-style: italic;
+    font-size: 1.07em;
+    letter-spacing: -0.087em;
   }
 }

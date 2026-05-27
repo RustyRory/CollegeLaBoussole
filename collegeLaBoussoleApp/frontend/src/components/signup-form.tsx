@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -74,10 +75,13 @@ export function SignupForm({
           <form className="p-6 md:p-8" onSubmit={handleSubmit}>
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <img
+                <Image
                   src="/assets/images/logo-light.svg"
                   alt="Collège La Boussole"
+                  width={120}
+                  height={40}
                   className="h-10 w-auto"
+                  unoptimized
                 />
                 <p className="text-balance text-sm text-zinc-500 dark:text-zinc-400">
                   Créer un nouveau compte
@@ -169,10 +173,13 @@ export function SignupForm({
 
           <div className="relative hidden bg-white md:block">
             <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-8 text-center">
-              <img
+              <Image
                 src="/assets/images/logo.svg"
                 alt="Collège La Boussole"
+                width={120}
+                height={80}
                 className="h-20 w-auto"
+                unoptimized
               />
               <p className="text-sm text-zinc-400">
                 Plateforme numérique du Collège La Boussole

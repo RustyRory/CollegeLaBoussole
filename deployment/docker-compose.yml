@@ -1,0 +1,18 @@
+services:
+  clb-back:
+    build:
+      context: ../collegeLaBoussoleApp/backend
+    container_name: clb-back
+    restart: unless-stopped
+    env_file:
+      - ../collegeLaBoussoleApp/backend/.env
+    ports:
+      - "127.0.0.1:5000:5000"
+
+  clb-front:
+    build:
+      context: ../collegeLaBoussoleApp/frontend
+    container_name: clb-front
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3003:3000"

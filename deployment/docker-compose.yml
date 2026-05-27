@@ -1,5 +1,6 @@
 services:
   clb-back:
+    image: clb-back:latest
     build:
       context: ../collegeLaBoussoleApp/backend
     container_name: clb-back
@@ -10,9 +11,10 @@ services:
       - "127.0.0.1:5000:5000"
 
   clb-front:
+    image: clb-front:latest
     build:
       context: ../collegeLaBoussoleApp/frontend
     container_name: clb-front
     restart: unless-stopped
     ports:
-      - "127.0.0.1:3003:3000"
+      - "127.0.0.1:3007:3000"

@@ -41,5 +41,6 @@ jobs:
           script: |
             set -e
             docker rm -f clb-back clb-front || true
-            docker compose -f /var/www/docker-compose.yml up -d --build clb-back clb-front
+            docker compose -f /var/www/docker-compose.yml build --no-cache clb-back clb-front
+            docker compose -f /var/www/docker-compose.yml up -d clb-back clb-front
             docker image prune -f

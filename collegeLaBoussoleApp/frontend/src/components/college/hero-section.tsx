@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
-import PhotoCarousel from "@/components/pedagogie/photo-carousel";
+import { Building2 } from "lucide-react";
+import PhotoCarousel from "@/components/college/photo-carousel";
 
 export default function HeroSection() {
   return (
@@ -9,17 +9,17 @@ export default function HeroSection() {
         {/* Badge */}
         <div className="inline-flex items-center gap-2.5 rounded-full border border-[#1C1410]/12 bg-white/60 px-1 pr-4 py-1 mb-10">
           <div className="w-7 h-7 rounded-full bg-[#1E3A2F] flex items-center justify-center shrink-0">
-            <BookOpen size={13} className="text-white" strokeWidth={2} />
+            <Building2 size={13} className="text-white" strokeWidth={2} />
           </div>
           <span className="text-xs text-[#1C1410]/70 font-medium">
-            Collège général adapté · Méthode active · Hors-contrat
+            Collège général adapté · Hors-contrat · Angers
           </span>
         </div>
 
         {/* Titre */}
-        <h1 className="text-5xl md:text-6xl lg:text-7xl mb-6 max-w-4xl mx-auto">
-          Une pédagogie ancrée dans{" "}
-          <em className="text-[#C85A2A]">l'action et le vivant.</em>
+        <h1 className="fraunces text-5xl md:text-6xl lg:text-7xl mb-6 max-w-4xl mx-auto leading-tight">
+          Un établissement chaleureux et pensé pour le{" "}
+          <em className="text-[#C85A2A]">bien-être des élèves.</em>
         </h1>
 
         {/* Accroche */}
@@ -32,10 +32,10 @@ export default function HeroSection() {
         {/* CTA */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
-            href="/college"
+            href="/pedagogie"
             className="inline-flex items-center gap-2 rounded-full bg-[#C85A2A] px-6 py-3 text-sm font-medium text-white hover:bg-[#B04E24] transition-colors"
           >
-            Découvrir l'établissement →
+            Notre pédagogie orientée réel →
           </Link>
           <Link
             href="/contact"

@@ -20,7 +20,7 @@ export default function HeroSection() {
       <section className="px-6 pt-16 max-w-5xl mx-auto text-center">
         {/* Badge */}
         <div className="inline-flex items-center gap-2.5 rounded-full border border-[#1C1410]/12 bg-white/60 px-1 pr-4 py-1 mb-10">
-          <div className="w-7 h-7 rounded-full bg-[#C85A2A] flex items-center justify-center shrink-0">
+          <div className="w-7 h-7 rounded-full bg-[#1E3A2F] flex items-center justify-center shrink-0">
             <Compass size={14} className="text-white" strokeWidth={2} />
           </div>
           <span className="text-xs text-[#1C1410]/70 font-medium">

@@ -10,11 +10,12 @@ const NAV_LINKS = [
   { label: "Accueil", href: "/" },
   { label: "La pédagogie", href: "/pedagogie" },
   { label: "L'établissement", href: "/college" },
-  { label: "Faire un don", href: "/don" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export default function SiteHeader() {
-  const pathname = usePathname();
+  const rawPathname = usePathname();
+  const pathname = rawPathname === "/" ? "/" : rawPathname.replace(/\/$/, "");
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -32,23 +33,35 @@ export default function SiteHeader() {
         </Link>
 
         <nav className="hidden md:flex items-center gap-8">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`text-sm font-medium transition-colors hover:text-[#C85A2A] ${
-                pathname === link.href ? "text-[#C85A2A]" : "text-[#1C1410]"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`relative text-sm font-medium transition-colors hover:text-[#C85A2A] pb-0.5 ${
+                  isActive ? "text-[#C85A2A]" : "text-[#1C1410]"
+                }`}
+              >
+                {link.label}
+                {isActive && (
+                  <span className="absolute bottom-0 left-0 right-0 h-px bg-[#C85A2A]" />
+                )}
+              </Link>
+            );
+          })}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
+          <Link
+            href="/don"
+            className="hidden md:inline-flex items-center justify-center rounded-full bg-[#C85A2A] px-5 py-2 text-sm font-medium text-white hover:bg-[#B04E24] transition-colors"
+          >
+            Faire un don
+          </Link>
           <Link
             href="/contact"
-            className="hidden md:inline-flex items-center justify-center rounded-full bg-[#C85A2A] px-5 py-2 text-sm font-medium text-white hover:bg-[#B04E24] transition-colors"
+            className="hidden md:inline-flex items-center justify-center rounded-full bg-white border border-[#1C1410]/20 px-5 py-2 text-sm font-medium text-[#1C1410] hover:border-[#1C1410]/50 transition-colors"
           >
             Nous contacter
           </Link>
@@ -72,19 +85,30 @@ export default function SiteHeader() {
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
                 className={`text-sm font-medium transition-colors ${
-                  pathname === link.href ? "text-[#C85A2A]" : "text-[#1C1410]"
+                  pathname === link.href
+                    ? "text-[#C85A2A] border-l-2 border-[#C85A2A] pl-2"
+                    : "text-[#1C1410]"
                 }`}
               >
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/contact"
-              onClick={() => setMenuOpen(false)}
-              className="inline-flex items-center justify-center rounded-full bg-[#C85A2A] px-5 py-2 text-sm font-medium text-white hover:bg-[#B04E24] transition-colors w-fit mt-2"
-            >
-              Nous contacter
-            </Link>
+            <div className="flex flex-col gap-2 mt-2">
+              <Link
+                href="/don"
+                onClick={() => setMenuOpen(false)}
+                className="inline-flex items-center justify-center rounded-full bg-[#C85A2A] px-5 py-2 text-sm font-medium text-white hover:bg-[#B04E24] transition-colors w-fit"
+              >
+                Faire un don
+              </Link>
+              <Link
+                href="/contact"
+                onClick={() => setMenuOpen(false)}
+                className="inline-flex items-center justify-center rounded-full bg-white border border-[#1C1410]/20 px-5 py-2 text-sm font-medium text-[#1C1410] hover:border-[#1C1410]/50 transition-colors w-fit"
+              >
+                Nous contacter
+              </Link>
+            </div>
           </nav>
         </div>
       )}

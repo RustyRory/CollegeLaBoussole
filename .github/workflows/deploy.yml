@@ -40,5 +40,6 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             set -e
+            docker rm -f clb-back clb-front || true
             docker compose -f /var/www/docker-compose.yml up -d --build clb-back clb-front
             docker image prune -f

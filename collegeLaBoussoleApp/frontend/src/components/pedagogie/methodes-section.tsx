@@ -65,10 +65,27 @@ const TABS: {
 
 function BulletIcon({ type }: { type: BulletType }) {
   if (type === "check")
-    return <Check size={14} className="text-[#C85A2A] shrink-0 mt-0.5" strokeWidth={2.5} />;
+    return (
+      <Check
+        size={14}
+        className="text-[#C85A2A] shrink-0 mt-0.5"
+        strokeWidth={2.5}
+      />
+    );
   if (type === "clock")
-    return <Clock size={14} className="text-[#C85A2A] shrink-0 mt-0.5" strokeWidth={2} />;
-  return <Circle size={6} className="text-[#C85A2A] shrink-0 mt-1.5 fill-[#C85A2A]" />;
+    return (
+      <Clock
+        size={14}
+        className="text-[#C85A2A] shrink-0 mt-0.5"
+        strokeWidth={2}
+      />
+    );
+  return (
+    <Circle
+      size={6}
+      className="text-[#C85A2A] shrink-0 mt-1.5 fill-[#C85A2A]"
+    />
+  );
 }
 
 export default function MethodesSection() {
@@ -109,8 +126,12 @@ export default function MethodesSection() {
       <div className="grid md:grid-cols-2 rounded-2xl overflow-hidden border border-[#1C1410]/8 bg-white h-[480px]">
         {/* Texte */}
         <div className="p-8 md:p-10 flex flex-col gap-4 overflow-hidden">
-          <h3 className="fraunces text-2xl md:text-3xl shrink-0">{tab.title}</h3>
-          <p className="text-sm text-[#1C1410]/60 leading-relaxed shrink-0">{tab.body}</p>
+          <h3 className="fraunces text-2xl md:text-3xl shrink-0">
+            {tab.title}
+          </h3>
+          <p className="text-sm text-[#1C1410]/60 leading-relaxed shrink-0">
+            {tab.body}
+          </p>
           <ul className="space-y-2 flex-1">
             {tab.bullets.map((b) => (
               <li key={b} className="flex items-start gap-2.5">
@@ -142,8 +163,8 @@ export default function MethodesSection() {
           <div className="absolute bottom-4 left-4 right-4">
             <div className="bg-[#1E3A2F] rounded-xl px-4 py-3">
               <p className="text-sm text-white/80 leading-relaxed italic">
-                « L'enfant retrouve le sens d'apprendre par le réel, le corps
-                et la bienveillance. »
+                « L'enfant retrouve le sens d'apprendre par le réel, le corps et
+                la bienveillance. »
               </p>
             </div>
           </div>

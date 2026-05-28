@@ -64,7 +64,9 @@ export default function PhotoCarousel() {
             className="shrink-0 snap-start w-[300px] md:w-[340px] aspect-[4/3] rounded-2xl flex items-end p-4"
             style={{ backgroundColor: slide.bg }}
           >
-            <span className="text-xs text-white/70 font-medium">{slide.label}</span>
+            <span className="text-xs text-white/70 font-medium">
+              {slide.label}
+            </span>
           </div>
         ))}
       </div>

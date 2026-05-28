@@ -10,8 +10,7 @@ export default function CtaSection() {
         <h2 className="fraunces text-4xl md:text-5xl text-white mb-2">
           Maintenant que vous nous
           <br />
-          connaissez,{" "}
-          <em className="text-[#C85A2A]">rejoignons ensemble.</em>
+          connaissez, <em className="text-[#C85A2A]">rejoignons ensemble.</em>
         </h2>
         <p className="mt-4 text-base text-white/50 max-w-md mx-auto leading-relaxed mb-8">
           Que vous soyez une famille, un donateur ou un partenaire, La Boussole

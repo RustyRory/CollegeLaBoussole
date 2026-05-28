@@ -1,4 +1,11 @@
-import { Leaf, Brain, Users, Award, CalendarClock, Banknote } from "lucide-react";
+import {
+  Leaf,
+  Brain,
+  Users,
+  Award,
+  CalendarClock,
+  Banknote,
+} from "lucide-react";
 
 const ITEMS = [
   {
@@ -52,7 +59,8 @@ export default function DifferenciateursSection() {
             <em className="text-[#C85A2A]">autres collèges</em>
           </h2>
           <p className="mt-5 text-base text-[#1C1410]/60 max-w-2xl mx-auto leading-relaxed">
-            Pas de compétition. Pas de notes punitives. Pas d'élèves invisibles. Une éducation qui respecte chaque être dans sa singularité.
+            Pas de compétition. Pas de notes punitives. Pas d'élèves invisibles.
+            Une éducation qui respecte chaque être dans sa singularité.
           </p>
         </div>
 

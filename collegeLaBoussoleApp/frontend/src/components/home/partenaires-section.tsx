@@ -9,7 +9,7 @@ const PARTNERS = [
 
 export default function PartenairesSection() {
   return (
-    <section className="py-16 border-t border-[#1C1410]/10">
+    <section className="py-16">
       <div className="text-center mb-10 px-6">
         <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#C85A2A] mb-4">
           Des acteurs qui nous accompagnent

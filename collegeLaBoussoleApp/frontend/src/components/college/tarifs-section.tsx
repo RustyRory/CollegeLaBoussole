@@ -47,12 +47,7 @@ export default function TarifsSection() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 mt-auto">
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#C85A2A] px-6 py-3 text-sm font-medium text-white hover:bg-[#B04E24] transition-colors"
-                >
-                  Nous contacter →
-                </Link>
+                
                 <Link
                   href="/contact"
                   className="inline-flex items-center gap-2 rounded-full border border-[#1C1410]/30 px-6 py-3 text-sm font-medium text-[#1C1410] hover:border-[#1C1410] transition-colors"

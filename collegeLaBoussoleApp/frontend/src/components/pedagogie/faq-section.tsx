@@ -35,10 +35,10 @@ export default function FaqSection() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section className="px-6 py-16 max-w-3xl mx-auto">
+    <section className="px-6 py-20 max-w-3xl mx-auto">
       <div className="text-center mb-12">
         <p className="text-xs font-semibold tracking-[0.2em] uppercase text-[#C85A2A] mb-4">
-          Trouvez un établissement réellement adapté à vos besoins
+          Vos questions
         </p>
         <h2 className="fraunces text-4xl md:text-5xl">
           Vous avez des questions ?
@@ -46,8 +46,7 @@ export default function FaqSection() {
           <em className="text-[#C85A2A]">Nous vous répondons.</em>
         </h2>
         <p className="mt-4 text-base text-[#1C1410]/60 leading-relaxed">
-          Les réponses aux questions les plus fréquentes des familles et
-          donateurs.
+          Les questions les plus fréquentes sur notre approche pédagogique.
         </p>
       </div>
 

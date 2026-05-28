@@ -54,7 +54,7 @@ const SOCIAL_LINKS = [
 
 export default function SiteFooter() {
   return (
-    <footer className="bg-[#F5F0E8] border-t border-[#E0D9CF] px-6 py-8">
+    <footer className="bg-white border-t border-[#E0D9CF] px-6 py-8">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           <Link href="/" className="shrink-0">

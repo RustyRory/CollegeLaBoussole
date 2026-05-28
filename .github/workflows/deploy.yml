@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Trigger update via vps-monitor
+      - name: Mise à jour du code via vps-monitor
         run: |
           LOGIN=$(curl -s -c cookies.txt \
             -X POST "${{ secrets.VPS_MONITOR_URL }}/auth/login" \
@@ -32,4 +32,13 @@ jobs:
           echo "Update response: $UPDATE"
           echo "$UPDATE" | grep -q '"ok":true' || { echo "Échec update vps-monitor"; exit 1; }
 
-          echo "Déploiement déclenché !"
+      - name: Rebuild et restart des containers
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+            docker compose -f /var/www/docker-compose.yml up -d --build clb-back clb-front
+            docker image prune -f

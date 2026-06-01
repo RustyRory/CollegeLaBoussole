@@ -16,5 +16,7 @@ services:
       context: ../collegeLaBoussoleApp/frontend
     container_name: clb-front
     restart: unless-stopped
+    environment:
+      HOSTNAME: "0.0.0.0"
     ports:
       - "127.0.0.1:3007:3000"

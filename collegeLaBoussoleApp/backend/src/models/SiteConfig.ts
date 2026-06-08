@@ -14,6 +14,8 @@ export interface ISiteConfig extends Document {
     email: string;
     fax: string;
     mapEmbedUrl: string;
+    availability: string;
+    responseTime: string;
   };
   socialLinks: {
     facebook: string;
@@ -22,6 +24,7 @@ export interface ISiteConfig extends Document {
     linkedin: string;
     youtube: string;
   };
+  helloAssoUrl: string;
   photos: Array<{
     url: string;
     alt: string;
@@ -32,6 +35,36 @@ export interface ISiteConfig extends Document {
     name: string;
     logoUrl: string;
     website: string;
+  }>;
+  team: Array<{
+    name: string;
+    role: string;
+    comite: string;
+    quote: string;
+    photoUrl: string;
+  }>;
+  faqItems: Array<{
+    question: string;
+    answer: string;
+  }>;
+  donationTiers: Array<{
+    amount: string;
+    label: string;
+    description: string;
+    populaire: boolean;
+    variant: string;
+  }>;
+  donChiffres: Array<{
+    number: string;
+    label: string;
+  }>;
+  audienceCards: Array<{
+    title: string;
+    description: string;
+    ctaLabel: string;
+    ctaHref: string;
+    imageUrl: string;
+    theme: string;
   }>;
   openingHours: string;
 }
@@ -51,6 +84,8 @@ const SiteConfigSchema = new Schema<ISiteConfig>(
       email: { type: String, default: "" },
       fax: { type: String, default: "" },
       mapEmbedUrl: { type: String, default: "" },
+      availability: { type: String, default: "" },
+      responseTime: { type: String, default: "" },
     },
     socialLinks: {
       facebook: { type: String, default: "" },
@@ -59,6 +94,7 @@ const SiteConfigSchema = new Schema<ISiteConfig>(
       linkedin: { type: String, default: "" },
       youtube: { type: String, default: "" },
     },
+    helloAssoUrl: { type: String, default: "" },
     photos: [
       {
         url: { type: String, default: "" },
@@ -72,6 +108,46 @@ const SiteConfigSchema = new Schema<ISiteConfig>(
         name: { type: String, default: "" },
         logoUrl: { type: String, default: "" },
         website: { type: String, default: "" },
+      },
+    ],
+    team: [
+      {
+        name: { type: String, default: "" },
+        role: { type: String, default: "" },
+        comite: { type: String, default: "" },
+        quote: { type: String, default: "" },
+        photoUrl: { type: String, default: "" },
+      },
+    ],
+    faqItems: [
+      {
+        question: { type: String, default: "" },
+        answer: { type: String, default: "" },
+      },
+    ],
+    donationTiers: [
+      {
+        amount: { type: String, default: "" },
+        label: { type: String, default: "" },
+        description: { type: String, default: "" },
+        populaire: { type: Boolean, default: false },
+        variant: { type: String, default: "light" },
+      },
+    ],
+    donChiffres: [
+      {
+        number: { type: String, default: "" },
+        label: { type: String, default: "" },
+      },
+    ],
+    audienceCards: [
+      {
+        title: { type: String, default: "" },
+        description: { type: String, default: "" },
+        ctaLabel: { type: String, default: "" },
+        ctaHref: { type: String, default: "" },
+        imageUrl: { type: String, default: "" },
+        theme: { type: String, default: "light" },
       },
     ],
     openingHours: { type: String, default: "" },

@@ -13,6 +13,7 @@ import groupsRoutes from "./routes/groups.js";
 import enrollmentsRoutes from "./routes/enrollments.js";
 import studentsRoutes from "./routes/students.js";
 import siteConfigRoutes from "./routes/siteConfig.js";
+import uploadRoutes, { UPLOADS_DIR } from "./routes/upload.js";
 
 const app = express();
 const PORT = process.env.PORT ?? 5000;
@@ -30,6 +31,8 @@ app.use("/api/groups", groupsRoutes);
 app.use("/api/enrollments", enrollmentsRoutes);
 app.use("/api/students", studentsRoutes);
 app.use("/api/site-config", siteConfigRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api/files", express.static(UPLOADS_DIR));
 
 mongoose
   .connect(process.env.MONGO_URI as string)

@@ -138,27 +138,26 @@ async function seed() {
   console.log("👨‍👩‍👧 Profils parents créés");
 
   // ── Profils élèves ────────────────────────────────────────────────────────────
-  const [studentProfile1, studentProfile2, studentProfile3] =
-    await StudentProfile.insertMany([
-      {
-        userId: student1._id,
-        firstName: "Lucas",
-        lastName: "Leroy",
-        birthDate: new Date("2013-03-14"),
-      },
-      {
-        userId: student2._id,
-        firstName: "Emma",
-        lastName: "Nguyen",
-        birthDate: new Date("2013-07-22"),
-      },
-      {
-        userId: student3._id,
-        firstName: "Noah",
-        lastName: "Bernard",
-        birthDate: new Date("2012-11-05"),
-      },
-    ]);
+  const [studentProfile1, studentProfile2] = await StudentProfile.insertMany([
+    {
+      userId: student1._id,
+      firstName: "Lucas",
+      lastName: "Leroy",
+      birthDate: new Date("2013-03-14"),
+    },
+    {
+      userId: student2._id,
+      firstName: "Emma",
+      lastName: "Nguyen",
+      birthDate: new Date("2013-07-22"),
+    },
+    {
+      userId: student3._id,
+      firstName: "Noah",
+      lastName: "Bernard",
+      birthDate: new Date("2012-11-05"),
+    },
+  ]);
   console.log("🎒 Profils élèves créés");
 
   // ── Liens parent ↔ élève ──────────────────────────────────────────────────────
@@ -526,7 +525,9 @@ async function seed() {
   console.log("══════════════════════════════════════════════");
   console.log("\n  COMPTES DE DÉMO\n");
   console.log("  Rôle       Email                                Mot de passe");
-  console.log("  ─────────────────────────────────────────────────────────────");
+  console.log(
+    "  ─────────────────────────────────────────────────────────────",
+  );
   console.log("  admin      admin@collegelaboussole.org          Admin1234!");
   console.log("  staff      direction@collegelaboussole.org      Staff1234!");
   console.log("  staff      m.dubois@collegelaboussole.org       Staff1234!");

@@ -21,6 +21,6 @@ jobs:
           RESPONSE=$(curl -s -w "\nHTTP:%{http_code}" -X POST "${{ secrets.VPS_MONITOR_URL }}/api/webhook/deploy" \
             -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
             -H "Content-Type: application/json" \
-            -d '{"name": "CollegeLaBoussole"}')
+            -d '{"name": "collegelaboussole"}')
           echo "Response: $RESPONSE"
           echo "$RESPONSE" | grep -q '"ok":true' || { echo "Échec déploiement vps-monitor"; exit 1; }

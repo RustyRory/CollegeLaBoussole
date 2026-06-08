@@ -22,37 +22,37 @@ const cards = [
     key: "users" as const,
     label: "Utilisateurs",
     icon: IconUsers,
-    color: "text-blue-500",
+    color: "text-[#C85A2A]",
   },
   {
     key: "years" as const,
     label: "Années scolaires",
     icon: IconCalendar,
-    color: "text-green-500",
+    color: "text-[#1E3A2F]",
   },
   {
     key: "classes" as const,
     label: "Classes",
     icon: IconSchool,
-    color: "text-orange-500",
+    color: "text-[#C85A2A]",
   },
   {
     key: "lectures" as const,
     label: "Cours",
     icon: IconBook,
-    color: "text-purple-500",
+    color: "text-[#1E3A2F]",
   },
   {
     key: "documents" as const,
     label: "Documents",
     icon: IconFiles,
-    color: "text-rose-500",
+    color: "text-[#C85A2A]",
   },
   {
     key: "groups" as const,
     label: "Groupes",
     icon: IconUsersGroup,
-    color: "text-cyan-500",
+    color: "text-[#1E3A2F]",
   },
 ];
 

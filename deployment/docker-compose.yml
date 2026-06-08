@@ -6,7 +6,7 @@ services:
     container_name: clb-back
     restart: unless-stopped
     env_file:
-      - ../collegeLaBoussoleApp/backend/.env
+      - .env
     ports:
       - "127.0.0.1:5000:5000"
 

@@ -1,7 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
+import { publicFetch } from "@/lib/api";
+
+type SiteConfig = { pedagogieImageUrl: string };
 
 const ITEMS = [
   {
@@ -54,6 +58,15 @@ const ITEMS = [
 
 export default function PedagogieSection() {
   const [openIndex, setOpenIndex] = useState(0);
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    publicFetch<SiteConfig>("/site-config")
+      .then((data) => {
+        if (data.pedagogieImageUrl) setImageUrl(data.pedagogieImageUrl);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <section className="px-6 py-16 max-w-5xl mx-auto">
@@ -122,6 +135,14 @@ export default function PedagogieSection() {
 
         {/* Image card with quote */}
         <div className="rounded-2xl overflow-hidden aspect-[3/4] bg-[#C8B09A] relative">
+          {imageUrl && (
+            <Image
+              src={imageUrl}
+              alt="Pédagogie La Boussole"
+              fill
+              className="object-cover"
+            />
+          )}
           <div className="absolute bottom-4 left-4 right-4">
             <div className="bg-[#1E3A2F] rounded-xl px-4 py-3">
               <p className="text-sm text-white/80 leading-relaxed italic">

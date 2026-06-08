@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Modal } from "@/components/ui/modal";
 import { apiFetch } from "@/lib/api";
+import { ImageUpload } from "@/components/ui/image-upload";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -72,6 +73,8 @@ type SiteConfig = {
     youtube: string;
   };
   helloAssoUrl: string;
+  etablissementImageUrl: string;
+  pedagogieImageUrl: string;
   photos: Photo[];
   partners: Partner[];
   team: TeamMember[];
@@ -89,6 +92,8 @@ const defaultConfig: SiteConfig = {
   tagline: "",
   openingHours: "",
   helloAssoUrl: "",
+  etablissementImageUrl: "",
+  pedagogieImageUrl: "",
   address: { street: "", city: "", postalCode: "", country: "France" },
   contact: {
     phone: "",
@@ -315,6 +320,18 @@ export default function WebsitePage() {
                     placeholder="https://www.helloasso.com/…"
                   />
                 </Field>
+                <ImageUpload
+                  label="Photo — section Établissement (accueil)"
+                  value={config.etablissementImageUrl}
+                  onChange={(url) => set("etablissementImageUrl", url)}
+                  aspectClass="aspect-[4/5] max-w-xs"
+                />
+                <ImageUpload
+                  label="Photo — section Pédagogie (accueil)"
+                  value={config.pedagogieImageUrl}
+                  onChange={(url) => set("pedagogieImageUrl", url)}
+                  aspectClass="aspect-[3/4] max-w-xs"
+                />
               </FieldGroup>
             </div>
           </TabsContent>
@@ -792,16 +809,12 @@ export default function WebsitePage() {
         title={editIndex !== null ? "Modifier la photo" : "Ajouter une photo"}
       >
         <FieldGroup>
-          <Field>
-            <FieldLabel>URL de l'image</FieldLabel>
-            <Input
-              type="url"
-              value={photoForm.url}
-              onChange={(e) =>
-                setPhotoForm({ ...photoForm, url: e.target.value })
-              }
-            />
-          </Field>
+          <ImageUpload
+            label="Image"
+            value={photoForm.url}
+            onChange={(url) => setPhotoForm({ ...photoForm, url })}
+            aspectClass="aspect-video"
+          />
           <Field>
             <FieldLabel>Titre / texte alternatif</FieldLabel>
             <Input
@@ -927,17 +940,12 @@ export default function WebsitePage() {
               }
             />
           </Field>
-          <Field>
-            <FieldLabel>URL de la photo</FieldLabel>
-            <Input
-              type="url"
-              value={teamForm.photoUrl}
-              onChange={(e) =>
-                setTeamForm({ ...teamForm, photoUrl: e.target.value })
-              }
-              placeholder="https://…"
-            />
-          </Field>
+          <ImageUpload
+            label="Photo du membre"
+            value={teamForm.photoUrl}
+            onChange={(url) => setTeamForm({ ...teamForm, photoUrl: url })}
+            aspectClass="aspect-square max-w-[180px]"
+          />
           <Button onClick={() => saveItem("team", teamForm)}>
             {editIndex !== null ? "Enregistrer" : "Ajouter"}
           </Button>
@@ -1131,16 +1139,12 @@ export default function WebsitePage() {
               placeholder="/college"
             />
           </Field>
-          <Field>
-            <FieldLabel>URL de l'image</FieldLabel>
-            <Input
-              type="url"
-              value={cardForm.imageUrl}
-              onChange={(e) =>
-                setCardForm({ ...cardForm, imageUrl: e.target.value })
-              }
-            />
-          </Field>
+          <ImageUpload
+            label="Image de la carte"
+            value={cardForm.imageUrl}
+            onChange={(url) => setCardForm({ ...cardForm, imageUrl: url })}
+            aspectClass="aspect-[4/3]"
+          />
           <Field>
             <FieldLabel>Thème</FieldLabel>
             <select

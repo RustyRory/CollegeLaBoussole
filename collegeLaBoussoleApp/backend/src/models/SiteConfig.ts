@@ -25,6 +25,8 @@ export interface ISiteConfig extends Document {
     youtube: string;
   };
   helloAssoUrl: string;
+  etablissementImageUrl: string;
+  pedagogieImageUrl: string;
   photos: Array<{
     url: string;
     alt: string;
@@ -95,6 +97,8 @@ const SiteConfigSchema = new Schema<ISiteConfig>(
       youtube: { type: String, default: "" },
     },
     helloAssoUrl: { type: String, default: "" },
+    etablissementImageUrl: { type: String, default: "" },
+    pedagogieImageUrl: { type: String, default: "" },
     photos: [
       {
         url: { type: String, default: "" },

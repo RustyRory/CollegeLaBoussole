@@ -16,31 +16,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Mise à jour du code via vps-monitor
+      - name: Trigger deploy via vps-monitor
         run: |
-          LOGIN=$(curl -s -c cookies.txt \
-            -X POST "${{ secrets.VPS_MONITOR_URL }}/auth/login" \
+          curl -f -s -X POST "${{ secrets.VPS_MONITOR_URL }}/api/webhook/deploy" \
+            -H "Authorization: Bearer ${{ secrets.WEBHOOK_SECRET }}" \
             -H "Content-Type: application/json" \
-            -d '{"username":"${{ secrets.VPS_MONITOR_USER }}","password":"${{ secrets.VPS_MONITOR_PASS }}"}')
-          echo "Login response: $LOGIN"
-          echo "$LOGIN" | grep -q '"ok":true' || { echo "Échec login vps-monitor"; exit 1; }
-
-          UPDATE=$(curl -s -b cookies.txt \
-            -X POST "${{ secrets.VPS_MONITOR_URL }}/api/deploy/update" \
-            -H "Content-Type: application/json" \
-            -d '{"name":"CollegeLaBoussole"}')
-          echo "Update response: $UPDATE"
-          echo "$UPDATE" | grep -q '"ok":true' || { echo "Échec update vps-monitor"; exit 1; }
-
-      - name: Rebuild et restart des containers
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_SSH_KEY }}
-          script: |
-            set -e
-            docker rm -f clb-back clb-front || true
-            docker compose -f /var/www/docker-compose.yml build --no-cache clb-back clb-front
-            docker compose -f /var/www/docker-compose.yml up -d clb-back clb-front
-            docker image prune -f
+            -d '{"name": "CollegeLaBoussole"}' \
+            | grep -q '"ok":true' || { echo "Échec déploiement vps-monitor"; exit 1; }

@@ -34,7 +34,7 @@ export default function EtablissementSection() {
               Ouverture
             </p>
             <p className="fraunces text-2xl leading-none mt-0.5">Sept.</p>
-            <p className="text-xs text-[#1C1410]/40 mt-1">2026 — Angers, 49</p>
+            <p className="text-xs text-[#1C1410]/40 mt-1">2027 — Angers, 49</p>
           </div>
         </div>
 

@@ -1,13 +1,26 @@
-const HELLO_ASSO_URL = "https://www.helloasso.com";
+"use client";
 
-const PALIERS = [
+import { useEffect, useState } from "react";
+import { publicFetch } from "@/lib/api";
+
+type Tier = {
+  amount: string;
+  label: string;
+  description: string;
+  populaire: boolean;
+  variant: string;
+};
+type SiteConfig = { donationTiers: Tier[]; helloAssoUrl: string };
+
+const FALLBACK_URL = "https://www.helloasso.com";
+const FALLBACK_TIERS: Tier[] = [
   {
     amount: "100 €",
     label: "don unique",
     description:
       "Finance les fournitures scolaires d'un élève pour un trimestre entier.",
     populaire: false,
-    variant: "light" as const,
+    variant: "light",
   },
   {
     amount: "250 €",
@@ -15,7 +28,7 @@ const PALIERS = [
     description:
       "Couvre un mois de scolarité pour un élève issu d'une famille modeste.",
     populaire: true,
-    variant: "dark" as const,
+    variant: "dark",
   },
   {
     amount: "500 €",
@@ -23,7 +36,7 @@ const PALIERS = [
     description:
       "Participe à l'aménagement des locaux : mobilier, équipements sportifs, jardin.",
     populaire: false,
-    variant: "light" as const,
+    variant: "light",
   },
   {
     amount: "1 000 €",
@@ -31,11 +44,23 @@ const PALIERS = [
     description:
       "Finance une année de scolarité complète pour un enfant de famille sans ressources.",
     populaire: false,
-    variant: "accent" as const,
+    variant: "accent",
   },
 ];
 
 export default function PaliersSection() {
+  const [tiers, setTiers] = useState<Tier[]>(FALLBACK_TIERS);
+  const [helloAssoUrl, setHelloAssoUrl] = useState(FALLBACK_URL);
+
+  useEffect(() => {
+    publicFetch<SiteConfig>("/site-config")
+      .then((data) => {
+        if (data.donationTiers?.length) setTiers(data.donationTiers);
+        if (data.helloAssoUrl) setHelloAssoUrl(data.helloAssoUrl);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section className="bg-[#F5F0E8] px-6 py-20">
       <div className="max-w-5xl mx-auto">
@@ -54,7 +79,7 @@ export default function PaliersSection() {
         </div>
 
         <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-          {PALIERS.map((palier) => {
+          {tiers.map((palier, idx) => {
             const isDark = palier.variant === "dark";
             const isAccent = palier.variant === "accent";
             const bg = isDark
@@ -79,7 +104,7 @@ export default function PaliersSection() {
 
             return (
               <div
-                key={palier.amount}
+                key={idx}
                 className={`relative ${bg} rounded-2xl p-6 flex flex-col gap-4`}
               >
                 {palier.populaire && (
@@ -101,7 +126,7 @@ export default function PaliersSection() {
                   {palier.description}
                 </p>
                 <a
-                  href={HELLO_ASSO_URL}
+                  href={helloAssoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`inline-flex items-center justify-center rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${btnClass}`}

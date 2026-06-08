@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FaqItem from "@/components/home/faq-item";
+import { publicFetch } from "@/lib/api";
 
-const FAQ_ITEMS = [
+type FaqEntry = { question: string; answer: string };
+type SiteConfig = { faqItems: FaqEntry[] };
+
+const FALLBACK: FaqEntry[] = [
   {
     question: "Qu'est-ce qu'un collège hors-contrat ?",
     answer:
@@ -32,7 +36,16 @@ const FAQ_ITEMS = [
 ];
 
 export default function FaqSection() {
+  const [items, setItems] = useState<FaqEntry[]>(FALLBACK);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  useEffect(() => {
+    publicFetch<SiteConfig>("/site-config")
+      .then((data) => {
+        if (data.faqItems?.length) setItems(data.faqItems);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <section className="px-6 py-16 max-w-3xl mx-auto">
@@ -52,7 +65,7 @@ export default function FaqSection() {
       </div>
 
       <div>
-        {FAQ_ITEMS.map((item, i) => (
+        {items.map((item, i) => (
           <FaqItem
             key={item.question}
             question={item.question}

@@ -68,19 +68,11 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
               <Link href="/dashboard">
                 <div className="flex items-center gap-2">
                   <Image
-                    src="/images/logo.svg"
-                    alt="La Boussole"
-                    width={120}
-                    height={32}
-                    className="h-8 w-auto dark:hidden"
-                    priority
-                  />
-                  <Image
                     src="/images/logo-light.svg"
                     alt="La Boussole"
                     width={120}
                     height={32}
-                    className="hidden h-8 w-auto dark:block"
+                    className="h-8 w-auto"
                     priority
                   />
                 </div>

@@ -2,10 +2,21 @@
 
 import { useState } from "react";
 import {
-  Clock, Leaf, CalendarClock, Users, Sparkles,
-  Layers, MapPin, Wrench, Sprout,
-  MessageCircle, ShieldCheck, Star,
-  Palette, UtensilsCrossed, Hammer,
+  Clock,
+  Leaf,
+  CalendarClock,
+  Users,
+  Sparkles,
+  Layers,
+  MapPin,
+  Wrench,
+  Sprout,
+  MessageCircle,
+  ShieldCheck,
+  Star,
+  Palette,
+  UtensilsCrossed,
+  Hammer,
 } from "lucide-react";
 
 const TABS: {
@@ -21,10 +32,10 @@ const TABS: {
     title: "La pédagogie vivante, c'est quoi ?",
     body: "Nous croyons que le corps et l'esprit ne font qu'un dans l'apprentissage. Un élève qui bouge, qui touche, qui expérimente retient mieux et apprend avec plaisir. Apprendre par l'expérience directe, le mouvement et le contact avec le réel. Chaque discipline s'ancre dans des situations concrètes et significatives pour l'élève.",
     bullets: [
-      { icon: Layers,  text: "Apprentissage par projets interdisciplinaires" },
-      { icon: MapPin,  text: "Sorties terrain régulières en Anjou" },
-      { icon: Wrench,  text: "Ateliers pratiques hebdomadaires" },
-      { icon: Sprout,  text: "Potager pédagogique et sciences du vivant" },
+      { icon: Layers, text: "Apprentissage par projets interdisciplinaires" },
+      { icon: MapPin, text: "Sorties terrain régulières en Anjou" },
+      { icon: Wrench, text: "Ateliers pratiques hebdomadaires" },
+      { icon: Sprout, text: "Potager pédagogique et sciences du vivant" },
     ],
   },
   {
@@ -47,9 +58,9 @@ const TABS: {
     body: "Nous ne sélectionnons pas sur les notes. Nous accueillons des élèves de tous niveaux, en veillant à construire une classe diverse, équilibrée et bienveillante. La rencontre avec la famille et l'élève est au cœur du processus d'admission.",
     bullets: [
       { icon: MessageCircle, text: "Entretien avec la famille et l'élève" },
-      { icon: ShieldCheck,   text: "Aucun critère académique éliminatoire" },
-      { icon: Users,         text: "Diversité sociale et scolaire recherchée" },
-      { icon: Star,          text: "Accompagnement personnalisé dès l'admission" },
+      { icon: ShieldCheck, text: "Aucun critère académique éliminatoire" },
+      { icon: Users, text: "Diversité sociale et scolaire recherchée" },
+      { icon: Star, text: "Accompagnement personnalisé dès l'admission" },
     ],
   },
   {
@@ -58,10 +69,13 @@ const TABS: {
     title: "Apprendre au-delà des cours",
     body: "Les activités extra-scolaires ne sont pas un bonus — elles font partie intégrante de notre projet pédagogique. Elles développent la curiosité, l'autonomie, la créativité et le sens des responsabilités.",
     bullets: [
-      { icon: Palette,          text: "Ateliers arts plastiques et expression" },
-      { icon: Sprout,           text: "Jardinage et entretien du potager" },
-      { icon: UtensilsCrossed,  text: "Cuisine et éducation alimentaire" },
-      { icon: Hammer,           text: "Fabrication, bricolage et découverte des métiers" },
+      { icon: Palette, text: "Ateliers arts plastiques et expression" },
+      { icon: Sprout, text: "Jardinage et entretien du potager" },
+      { icon: UtensilsCrossed, text: "Cuisine et éducation alimentaire" },
+      {
+        icon: Hammer,
+        text: "Fabrication, bricolage et découverte des métiers",
+      },
     ],
   },
 ];
@@ -108,9 +122,7 @@ export default function MethodesSection() {
       <div className="grid md:grid-cols-2 rounded-2xl overflow-hidden border border-[#1C1410]/8 bg-white md:h-[420px]">
         {/* Texte */}
         <div className="p-8 md:p-10 flex flex-col gap-4">
-          <h3 className="fraunces text-2xl md:text-3xl">
-            {tab.title}
-          </h3>
+          <h3 className="fraunces text-2xl md:text-3xl">{tab.title}</h3>
           <p className="text-sm text-[#1C1410]/60 leading-relaxed">
             {tab.body}
           </p>
@@ -129,8 +141,6 @@ export default function MethodesSection() {
               );
             })}
           </ul>
-
-          
         </div>
 
         {/* Image */}

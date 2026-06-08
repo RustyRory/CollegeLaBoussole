@@ -12,6 +12,7 @@ import documentsRoutes from "./routes/documents.js";
 import groupsRoutes from "./routes/groups.js";
 import enrollmentsRoutes from "./routes/enrollments.js";
 import studentsRoutes from "./routes/students.js";
+import siteConfigRoutes from "./routes/siteConfig.js";
 
 const app = express();
 const PORT = process.env.PORT ?? 5000;
@@ -28,6 +29,7 @@ app.use("/api/documents", documentsRoutes);
 app.use("/api/groups", groupsRoutes);
 app.use("/api/enrollments", enrollmentsRoutes);
 app.use("/api/students", studentsRoutes);
+app.use("/api/site-config", siteConfigRoutes);
 
 mongoose
   .connect(process.env.MONGO_URI as string)

@@ -60,21 +60,22 @@ export default function PaliersSection() {
             const bg = isDark
               ? "bg-[#1E3A2F]"
               : isAccent
-              ? "bg-[#C85A2A]"
-              : "bg-white border border-[#1C1410]/8";
-            const textTitle = isDark || isAccent ? "text-white" : "text-[#1C1410]";
-            const textBody = isDark || isAccent ? "text-white/70" : "text-[#1C1410]/60";
-            const textLabel = isDark || isAccent ? "text-white/50" : "text-[#1C1410]/40";
+                ? "bg-[#C85A2A]"
+                : "bg-white border border-[#1C1410]/8";
+            const textBody =
+              isDark || isAccent ? "text-white/70" : "text-[#1C1410]/60";
+            const textLabel =
+              isDark || isAccent ? "text-white/50" : "text-[#1C1410]/40";
             const amountColor = isDark
               ? "text-[#C85A2A]"
               : isAccent
-              ? "text-white"
-              : "text-[#C85A2A]";
+                ? "text-white"
+                : "text-[#C85A2A]";
             const btnClass = isDark
               ? "bg-[#C85A2A] text-white hover:bg-[#B04E24]"
               : isAccent
-              ? "bg-white text-[#C85A2A] hover:bg-white/90"
-              : "bg-[#1E3A2F] text-white hover:bg-[#1E3A2F]/90";
+                ? "bg-white text-[#C85A2A] hover:bg-white/90"
+                : "bg-[#1E3A2F] text-white hover:bg-[#1E3A2F]/90";
 
             return (
               <div
@@ -87,10 +88,14 @@ export default function PaliersSection() {
                   </span>
                 )}
                 <div>
-                  <span className={`fraunces text-4xl font-medium ${amountColor}`}>
+                  <span
+                    className={`fraunces text-4xl font-medium ${amountColor}`}
+                  >
                     {palier.amount}
                   </span>
-                  <p className={`text-xs mt-0.5 ${textLabel}`}>{palier.label}</p>
+                  <p className={`text-xs mt-0.5 ${textLabel}`}>
+                    {palier.label}
+                  </p>
                 </div>
                 <p className={`text-sm leading-relaxed flex-1 ${textBody}`}>
                   {palier.description}

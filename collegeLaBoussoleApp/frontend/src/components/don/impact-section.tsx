@@ -55,7 +55,9 @@ export default function ImpactSection() {
                 <h3 className="font-semibold text-sm text-[#1C1410]">
                   {stat.label}
                 </h3>
-                <span className="text-xs text-[#1C1410]/50">{stat.sublabel}</span>
+                <span className="text-xs text-[#1C1410]/50">
+                  {stat.sublabel}
+                </span>
               </div>
               <p className="text-sm text-[#1C1410]/60 leading-relaxed">
                 {stat.description}

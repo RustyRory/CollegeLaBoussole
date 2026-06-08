@@ -34,8 +34,8 @@ export default function AvantagesSection() {
             <em className="text-[#C85A2A]">une structure engagée</em>
           </h2>
           <p className="mt-4 text-base text-[#1C1410]/60 max-w-2xl mx-auto leading-relaxed">
-            Donner à La Boussole, c'est à la fois soutenir un projet éducatif
-            et bénéficier d'avantages fiscaux concrets.
+            Donner à La Boussole, c'est à la fois soutenir un projet éducatif et
+            bénéficier d'avantages fiscaux concrets.
           </p>
         </div>
 

@@ -2,12 +2,21 @@
 
 import { useState } from "react";
 import {
-  MapPin, LayoutGrid, Leaf, Bus,
-  Bike, TreePine, BookOpen, Palette,
-  Sprout, Activity, Flag, Car, Accessibility, Move,
+  MapPin,
+  LayoutGrid,
+  Leaf,
+  Bus,
+  Bike,
+  TreePine,
+  BookOpen,
+  Palette,
+  Sprout,
+  Activity,
+  Flag,
+  Car,
+  Accessibility,
+  Move,
 } from "lucide-react";
-import Link from "next/link";
-
 const TABS: {
   icon: React.ElementType;
   label: string;
@@ -21,9 +30,9 @@ const TABS: {
     title: "Un emplacement idéal au cœur de l'Anjou",
     body: "Le Collège La Boussole s'installe à Angers, ville dynamique et accessible, au carrefour des transports en commun et à proximité des espaces naturels qui alimentent notre pédagogie du vivant.",
     bullets: [
-      { icon: MapPin,  text: "Situé à Angers (Maine-et-Loire, 49)" },
-      { icon: Bus,     text: "Proche du réseau de bus et tramway" },
-      { icon: Bike,    text: "Accès vélo sécurisé" },
+      { icon: MapPin, text: "Situé à Angers (Maine-et-Loire, 49)" },
+      { icon: Bus, text: "Proche du réseau de bus et tramway" },
+      { icon: Bike, text: "Accès vélo sécurisé" },
       { icon: TreePine, text: "Environnement calme et végétalisé" },
     ],
   },
@@ -33,10 +42,13 @@ const TABS: {
     title: "Des espaces pensés pour apprendre autrement",
     body: "Nos salles sont modulables par design : le mobilier se déplace, les murs s'effacent. Chaque configuration de classe soutient un mode d'apprentissage différent — travail en groupe, en atelier ou en autonomie.",
     bullets: [
-      { icon: Move,      text: "Mobilier ergonomique déplaçable" },
-      { icon: LayoutGrid, text: "Salles polyvalentes pour les ateliers pratiques" },
-      { icon: BookOpen,  text: "Espace bibliothèque et ressources" },
-      { icon: Palette,   text: "Atelier de fabrication et arts plastiques" },
+      { icon: Move, text: "Mobilier ergonomique déplaçable" },
+      {
+        icon: LayoutGrid,
+        text: "Salles polyvalentes pour les ateliers pratiques",
+      },
+      { icon: BookOpen, text: "Espace bibliothèque et ressources" },
+      { icon: Palette, text: "Atelier de fabrication et arts plastiques" },
     ],
   },
   {
@@ -45,10 +57,10 @@ const TABS: {
     title: "Un terrain vert pour apprendre dehors",
     body: "L'extérieur fait partie de l'école. Le terrain comprend un jardin pédagogique, des zones de mouvement et des espaces de repos à l'ombre. Apprendre dehors est une pratique quotidienne, pas une exception.",
     bullets: [
-      { icon: Sprout,   text: "Potager pédagogique et compostage" },
+      { icon: Sprout, text: "Potager pédagogique et compostage" },
       { icon: Activity, text: "Zone hébertisme et parcours moteur" },
-      { icon: Leaf,     text: "Espaces de pause ombragés" },
-      { icon: Flag,     text: "Terrain multi-activités" },
+      { icon: Leaf, text: "Espaces de pause ombragés" },
+      { icon: Flag, text: "Terrain multi-activités" },
     ],
   },
   {
@@ -57,9 +69,9 @@ const TABS: {
     title: "Un lieu facile d'accès pour toutes les familles",
     body: "Nous avons veillé à choisir un site accessible à pied, en vélo, en bus ou en voiture depuis les principaux quartiers d'Angers. Aucune famille ne doit être freinée par la distance ou les transports.",
     bullets: [
-      { icon: Bus,           text: "Arrêt de bus à 3 minutes à pied" },
-      { icon: Bike,          text: "Stationnement vélos sécurisé" },
-      { icon: Car,           text: "Parking visiteurs disponible" },
+      { icon: Bus, text: "Arrêt de bus à 3 minutes à pied" },
+      { icon: Bike, text: "Stationnement vélos sécurisé" },
+      { icon: Car, text: "Parking visiteurs disponible" },
       { icon: Accessibility, text: "Accessibilité PMR garantie" },
     ],
   },
@@ -112,7 +124,9 @@ export default function CadreSection() {
         {/* Texte */}
         <div className="p-8 md:p-10 flex flex-col gap-4">
           <h3 className="fraunces text-2xl md:text-3xl">{tab.title}</h3>
-          <p className="text-sm text-[#1C1410]/60 leading-relaxed">{tab.body}</p>
+          <p className="text-sm text-[#1C1410]/60 leading-relaxed">
+            {tab.body}
+          </p>
           <ul className="space-y-2">
             {tab.bullets.map((b) => {
               const Icon = b.icon;
@@ -128,8 +142,6 @@ export default function CadreSection() {
               );
             })}
           </ul>
-
-          
         </div>
 
         {/* Image placeholder */}

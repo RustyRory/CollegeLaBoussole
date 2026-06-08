@@ -74,6 +74,7 @@ export function AppSidebar({ user, ...props }: AppSidebarProps) {
                     height={32}
                     className="h-8 w-auto"
                     priority
+                    unoptimized
                   />
                 </div>
               </Link>

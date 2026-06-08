@@ -1,5 +1,12 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { Users, Building2, Banknote } from "lucide-react";
+import { publicFetch } from "@/lib/api";
+
+type SiteConfig = { etablissementImageUrl: string };
 
 const ITEMS = [
   {
@@ -23,12 +30,31 @@ const ITEMS = [
 ];
 
 export default function EtablissementSection() {
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    publicFetch<SiteConfig>("/site-config")
+      .then((data) => {
+        if (data.etablissementImageUrl) setImageUrl(data.etablissementImageUrl);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section className="px-6 py-16 max-w-5xl mx-auto">
       <div className="grid md:grid-cols-2 gap-12 items-start">
         {/* Image + badge */}
         <div className="relative">
-          <div className="rounded-2xl aspect-[4/5] bg-[#C8B09A]" />
+          <div className="rounded-2xl aspect-[4/5] bg-[#C8B09A] relative overflow-hidden">
+            {imageUrl && (
+              <Image
+                src={imageUrl}
+                alt="L'établissement La Boussole"
+                fill
+                className="object-cover"
+              />
+            )}
+          </div>
           <div className="absolute bottom-4 left-4 bg-white rounded-xl px-4 py-3 shadow-sm border border-[#1C1410]/8">
             <p className="text-[10px] font-semibold text-[#C85A2A] uppercase tracking-widest">
               Ouverture

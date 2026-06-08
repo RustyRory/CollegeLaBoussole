@@ -41,7 +41,9 @@ const INITIAL: FormState = {
 
 export default function FormSection() {
   const [form, setForm] = useState<FormState>(INITIAL);
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
 
   function set(field: keyof FormState, value: string | boolean) {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -77,11 +79,11 @@ export default function FormSection() {
           {/* Header */}
           <div className="mb-8">
             <h2 className="fraunces text-3xl md:text-4xl leading-tight">
-              Envoyez-nous{" "}
-              <em className="text-[#C85A2A]">un message</em>
+              Envoyez-nous <em className="text-[#C85A2A]">un message</em>
             </h2>
             <p className="mt-2 text-sm text-[#1C1410]/50 leading-relaxed">
-              Nous lisons chaque message et vous répondons personnellement sous 48 h.
+              Nous lisons chaque message et vous répondons personnellement sous
+              48 h.
             </p>
           </div>
 
@@ -135,7 +137,8 @@ export default function FormSection() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-semibold text-[#1C1410]/60">
-                  Qui souhaitez-vous contacter ? <span className="text-[#C85A2A]">*</span>
+                  Qui souhaitez-vous contacter ?{" "}
+                  <span className="text-[#C85A2A]">*</span>
                 </label>
                 <select
                   required
@@ -143,9 +146,13 @@ export default function FormSection() {
                   onChange={(e) => set("contact", e.target.value)}
                   className={selectClass}
                 >
-                  <option value="" disabled>Sélectionnez</option>
+                  <option value="" disabled>
+                    Sélectionnez
+                  </option>
                   {CONTACTS.map((c) => (
-                    <option key={c} value={c}>{c}</option>
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -159,9 +166,13 @@ export default function FormSection() {
                   onChange={(e) => set("sujet", e.target.value)}
                   className={selectClass}
                 >
-                  <option value="" disabled>Sélectionnez</option>
+                  <option value="" disabled>
+                    Sélectionnez
+                  </option>
                   {SUBJECTS.map((s) => (
-                    <option key={s} value={s}>{s}</option>
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -192,10 +203,15 @@ export default function FormSection() {
                   className="mt-0.5 shrink-0 accent-[#C85A2A]"
                 />
                 <span className="text-xs text-[#1C1410]/50 leading-relaxed">
-                  En vous inscrivant, vous confirmez que vous acceptez le traitement de vos données personnelles comme décrit dans notre{" "}
-                  <a href="/politique-confidentialite" className="underline hover:text-[#C85A2A] transition-colors">
+                  En vous inscrivant, vous confirmez que vous acceptez le
+                  traitement de vos données personnelles comme décrit dans notre{" "}
+                  <a
+                    href="/politique-confidentialite"
+                    className="underline hover:text-[#C85A2A] transition-colors"
+                  >
                     politique de confidentialité
-                  </a>.
+                  </a>
+                  .
                 </span>
               </label>
               <label className="flex items-start gap-3 cursor-pointer">
@@ -206,7 +222,8 @@ export default function FormSection() {
                   className="mt-0.5 shrink-0 accent-[#C85A2A]"
                 />
                 <span className="text-xs text-[#1C1410]/50 leading-relaxed">
-                  Je ne souhaite pas recevoir de communication marketing sur les produits, services et actualités de La Boussole.
+                  Je ne souhaite pas recevoir de communication marketing sur les
+                  produits, services et actualités de La Boussole.
                 </span>
               </label>
             </div>
@@ -229,7 +246,9 @@ export default function FormSection() {
               disabled={status === "loading"}
               className="w-full rounded-full bg-[#C85A2A] px-6 py-3.5 text-sm font-medium text-white hover:bg-[#B04E24] transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {status === "loading" ? "Envoi en cours…" : "→ Envoyer votre message"}
+              {status === "loading"
+                ? "Envoi en cours…"
+                : "→ Envoyer votre message"}
             </button>
           </form>
         </div>

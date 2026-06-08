@@ -27,7 +27,12 @@ type Partner = {
 type SiteConfig = {
   name: string;
   tagline: string;
-  address: { street: string; city: string; postalCode: string; country: string };
+  address: {
+    street: string;
+    city: string;
+    postalCode: string;
+    country: string;
+  };
   contact: { phone: string; email: string; fax: string; mapEmbedUrl: string };
   socialLinks: {
     facebook: string;
@@ -135,7 +140,10 @@ export default function WebsitePage() {
   }
 
   function removePhoto(i: number) {
-    set("photos", config.photos.filter((_, idx) => idx !== i));
+    set(
+      "photos",
+      config.photos.filter((_, idx) => idx !== i),
+    );
   }
 
   // Partners
@@ -163,7 +171,10 @@ export default function WebsitePage() {
   }
 
   function removePartner(i: number) {
-    set("partners", config.partners.filter((_, idx) => idx !== i));
+    set(
+      "partners",
+      config.partners.filter((_, idx) => idx !== i),
+    );
   }
 
   return (
@@ -375,6 +386,7 @@ export default function WebsitePage() {
                   className="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-700 dark:bg-zinc-900"
                 >
                   {photo.url && (
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={photo.url}
                       alt={photo.alt}
@@ -385,7 +397,9 @@ export default function WebsitePage() {
                     {photo.alt || "(sans titre)"}
                   </p>
                   {photo.caption && (
-                    <p className="mb-1 text-xs text-zinc-500">{photo.caption}</p>
+                    <p className="mb-1 text-xs text-zinc-500">
+                      {photo.caption}
+                    </p>
                   )}
                   {photo.category && (
                     <span className="inline-block rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
@@ -461,6 +475,7 @@ export default function WebsitePage() {
                       </td>
                       <td className="px-4 py-3">
                         {partner.logoUrl ? (
+                          // eslint-disable-next-line @next/next/no-img-element
                           <img
                             src={partner.logoUrl}
                             alt={partner.name}
@@ -555,7 +570,9 @@ export default function WebsitePage() {
         open={partnerModal}
         onClose={() => setPartnerModal(false)}
         title={
-          partnerIndex !== null ? "Modifier le partenaire" : "Ajouter un partenaire"
+          partnerIndex !== null
+            ? "Modifier le partenaire"
+            : "Ajouter un partenaire"
         }
       >
         <FieldGroup>

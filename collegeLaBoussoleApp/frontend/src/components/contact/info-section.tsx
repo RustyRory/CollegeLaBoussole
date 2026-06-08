@@ -1,29 +1,63 @@
-import { MapPin, Mail, Phone, Clock } from "lucide-react";
+"use client";
 
-const INFO = [
-  {
-    icon: MapPin,
-    label: "Adresse",
-    lines: ["Angers (49)", "01 rue de la Boussole - Belle-Beille"],
-  },
-  {
-    icon: Mail,
-    label: "Email",
-    lines: ["contact@laboussole-college.fr"],
-  },
-  {
-    icon: Phone,
-    label: "Téléphone",
-    lines: ["06 99 78 70 25"],
-  },
-  {
-    icon: Clock,
-    label: "Disponibilités",
-    lines: ["Lun – Ven : 9h – 18h", "Réponse sous 48 h ouvrées"],
-  },
-];
+import { useEffect, useState } from "react";
+import { MapPin, Mail, Phone, Clock } from "lucide-react";
+import { publicFetch } from "@/lib/api";
+
+type SiteConfig = {
+  address: { street: string; city: string; postalCode: string };
+  contact: {
+    phone: string;
+    email: string;
+    availability: string;
+    responseTime: string;
+  };
+};
 
 export default function InfoSection() {
+  const [data, setData] = useState<SiteConfig | null>(null);
+
+  useEffect(() => {
+    publicFetch<SiteConfig>("/site-config")
+      .then(setData)
+      .catch(() => {});
+  }, []);
+
+  const address = data?.address;
+  const contact = data?.contact;
+
+  const INFO = [
+    {
+      icon: MapPin,
+      label: "Adresse",
+      lines:
+        address?.city || address?.street
+          ? [
+              [address.city, address.postalCode].filter(Boolean).join(" "),
+              address.street,
+            ].filter(Boolean)
+          : ["Angers (49)", "01 rue de la Boussole - Belle-Beille"],
+    },
+    {
+      icon: Mail,
+      label: "Email",
+      lines: [contact?.email || "contact@laboussole-college.fr"],
+    },
+    {
+      icon: Phone,
+      label: "Téléphone",
+      lines: [contact?.phone || "06 99 78 70 25"],
+    },
+    {
+      icon: Clock,
+      label: "Disponibilités",
+      lines: [
+        contact?.availability || "Lun – Ven : 9h – 18h",
+        contact?.responseTime || "Réponse sous 48 h ouvrées",
+      ].filter(Boolean),
+    },
+  ];
+
   return (
     <section className="px-6 py-16">
       <div className="max-w-5xl mx-auto">

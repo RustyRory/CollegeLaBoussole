@@ -31,3 +31,11 @@ export async function apiFetch<T>(
 
   return data as T;
 }
+
+export async function publicFetch<T>(path: string): Promise<T> {
+  const res = await fetch(`${BASE_URL}${path}`, {
+    next: { revalidate: 60 },
+  });
+  if (!res.ok) throw new Error("Erreur API");
+  return res.json() as Promise<T>;
+}

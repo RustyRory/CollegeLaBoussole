@@ -1,11 +1,29 @@
-const CHIFFRES = [
+"use client";
+
+import { useEffect, useState } from "react";
+import { publicFetch } from "@/lib/api";
+
+const FALLBACK = [
   { number: "150+", label: "Familles déjà engagées" },
   { number: "66 %", label: "De réduction d'impôt" },
   { number: "0 €", label: "De salaires versés" },
   { number: "2027", label: "Ouverture prévue" },
 ];
 
+type Chiffre = { number: string; label: string };
+type SiteConfig = { donChiffres: Chiffre[] };
+
 export default function PourquoiSection() {
+  const [chiffres, setChiffres] = useState<Chiffre[]>(FALLBACK);
+
+  useEffect(() => {
+    publicFetch<SiteConfig>("/site-config")
+      .then((data) => {
+        if (data.donChiffres?.length) setChiffres(data.donChiffres);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section className="bg-[#F5F0E8] px-6 py-20">
       <div className="max-w-5xl mx-auto">
@@ -26,9 +44,8 @@ export default function PourquoiSection() {
           </p>
         </div>
 
-        {/* Chiffres clés */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {CHIFFRES.map((c) => (
+          {chiffres.map((c) => (
             <div
               key={c.label}
               className="bg-white border border-[#1C1410]/8 rounded-2xl p-6 flex flex-col gap-1"

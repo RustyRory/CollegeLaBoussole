@@ -12,6 +12,7 @@ import {
   IconDashboard,
   IconBook,
   IconClipboardList,
+  IconWorld,
 } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -41,6 +42,7 @@ const navMain = [
     url: "/dashboard/enrollments",
     icon: IconClipboardList,
   },
+  { title: "Site web", url: "/dashboard/website", icon: IconWorld },
 ];
 
 const navSecondary = [

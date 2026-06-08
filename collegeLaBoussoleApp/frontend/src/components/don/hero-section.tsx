@@ -1,8 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Heart } from "lucide-react";
 
 const HELLO_ASSO_URL = "https://www.helloasso.com";
-
 
 export default function HeroSection() {
   return (
@@ -54,10 +54,11 @@ export default function HeroSection() {
       <div className="w-full mt-14 px-6 md:px-32">
         <div className="bg-white rounded-3xl p-3 shadow-sm border border-[#1C1410]/8">
           <div className="relative w-full rounded-2xl overflow-hidden aspect-[16/4]">
-            <img
+            <Image
               src="/images/don/groupe.jpg"
               alt="L'ensemble des membres du Collège La Boussole"
-              className="w-full h-full object-cover object-top"
+              fill
+              className="object-cover object-top"
             />
             <span className="absolute bottom-4 left-4 text-xs text-white/70 font-medium">
               L'équipe et les membres du Collège La Boussole

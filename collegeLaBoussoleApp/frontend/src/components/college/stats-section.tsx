@@ -35,8 +35,8 @@ export default function StatsSection() {
             <em className="text-[#C85A2A]">notre établissement scolaire</em>
           </h2>
           <p className="mt-5 text-base text-[#1C1410]/60 max-w-2xl mx-auto leading-relaxed">
-            Une équipe pluridisciplinaire réunie autour d'une conviction : chaque
-            enfant peut trouver sa voie d'apprentissage.
+            Une équipe pluridisciplinaire réunie autour d'une conviction :
+            chaque enfant peut trouver sa voie d'apprentissage.
           </p>
         </div>
 

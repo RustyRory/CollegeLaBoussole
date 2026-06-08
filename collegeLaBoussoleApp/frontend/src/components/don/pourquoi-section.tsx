@@ -1,7 +1,3 @@
-import Link from "next/link";
-
-const HELLO_ASSO_URL = "https://www.helloasso.com";
-
 const CHIFFRES = [
   { number: "150+", label: "Familles déjà engagées" },
   { number: "66 %", label: "De réduction d'impôt" },
@@ -24,11 +20,10 @@ export default function PourquoiSection() {
           <p className="mt-4 text-base text-[#1C1410]/60 max-w-2xl mx-auto leading-relaxed">
             Développer un établissement scolaire est un investissement très
             important. Notre structure, gérée par une association et
-            fonctionnant majoritairement avec des bénévoles, est en recherche
-            de fonds pour financer les locaux, le matériel pédagogique et les
+            fonctionnant majoritairement avec des bénévoles, est en recherche de
+            fonds pour financer les locaux, le matériel pédagogique et les
             premières années de fonctionnement.
           </p>
-          
         </div>
 
         {/* Chiffres clés */}
@@ -38,7 +33,9 @@ export default function PourquoiSection() {
               key={c.label}
               className="bg-white border border-[#1C1410]/8 rounded-2xl p-6 flex flex-col gap-1"
             >
-              <span className="fraunces text-4xl text-[#C85A2A]">{c.number}</span>
+              <span className="fraunces text-4xl text-[#C85A2A]">
+                {c.number}
+              </span>
               <span className="text-sm text-[#1C1410]/60">{c.label}</span>
             </div>
           ))}

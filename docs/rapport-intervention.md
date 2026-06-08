@@ -1,4 +1,5 @@
 # Rapport d'intervention — B3 Développeur Web
+
 ## Collège La Boussole · MyDigitalProject 2025–2026
 
 ---
@@ -23,11 +24,11 @@ Le **Collège La Boussole** est un établissement scolaire en cours de création
 
 Le projet se divise en trois grands volets :
 
-| Volet | Description |
-|---|---|
-| **Site vitrine** | Présentation publique du collège, espace donateurs, formulaire de contact |
+| Volet                      | Description                                                                     |
+| -------------------------- | ------------------------------------------------------------------------------- |
+| **Site vitrine**           | Présentation publique du collège, espace donateurs, formulaire de contact       |
 | **Plateforme web interne** | Espaces sécurisés par rôle (admin, staff, famille, élève), gestion documentaire |
-| **Service web** | Communication interne type messagerie / partage de documents |
+| **Service web**            | Communication interne type messagerie / partage de documents                    |
 
 ### 1.2 Contexte de développement
 
@@ -59,6 +60,7 @@ Le VPS de test mis à disposition dans le cadre du projet est opérationnel à l
 **Environnement de production (proposé)**
 
 La solution retenue est **Oracle Cloud Free Tier** (Always Free) :
+
 - 2 instances ARM Ampere A1 (4 CPU / 24 Go RAM au total)
 - 200 Go de stockage bloc
 - Réseau et bande passante inclus sans surcoût
@@ -75,30 +77,30 @@ Cette solution est suffisante pour les besoins d'un collège en phase de lanceme
 
 L'architecture retenue est de type **full-stack JavaScript**, permettant une cohérence technologique entre front-end et back-end, et facilitant la maintenance future.
 
-| Couche | Technologie | Justification |
-|---|---|---|
-| Front-end | **Next.js 15** (App Router) | SSR/SSG pour le SEO, routing intégré, composants React, support TypeScript natif |
-| Back-end | **Express 5 + TypeScript** | Léger, flexible, parfaitement adapté à une API REST, écosystème npm vaste |
-| Base de données | **MongoDB + Mongoose** | Schéma flexible pour un modèle de données évolutif, ODM typé avec Mongoose |
-| UI | **Tailwind CSS v4 + Radix UI** | Composants accessibles sans style imposé, composants construits manuellement (sans CLI shadcn) |
-| Auth | **JWT (jsonwebtoken + bcryptjs)** | Stateless, compatible avec une API REST, gestion des rôles simplifiée |
-| Déploiement | **Docker + Docker Compose** | Environnement identique entre dev, staging et production |
-| CI/CD | **GitHub Actions** | Pipeline automatisé intégré au repository |
+| Couche          | Technologie                       | Justification                                                                                  |
+| --------------- | --------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Front-end       | **Next.js 15** (App Router)       | SSR/SSG pour le SEO, routing intégré, composants React, support TypeScript natif               |
+| Back-end        | **Express 5 + TypeScript**        | Léger, flexible, parfaitement adapté à une API REST, écosystème npm vaste                      |
+| Base de données | **MongoDB + Mongoose**            | Schéma flexible pour un modèle de données évolutif, ODM typé avec Mongoose                     |
+| UI              | **Tailwind CSS v4 + Radix UI**    | Composants accessibles sans style imposé, composants construits manuellement (sans CLI shadcn) |
+| Auth            | **JWT (jsonwebtoken + bcryptjs)** | Stateless, compatible avec une API REST, gestion des rôles simplifiée                          |
+| Déploiement     | **Docker + Docker Compose**       | Environnement identique entre dev, staging et production                                       |
+| CI/CD           | **GitHub Actions**                | Pipeline automatisé intégré au repository                                                      |
 
 #### Validation du périmètre MVP
 
 Compte tenu des contraintes de temps, le périmètre de développement a été priorisé ainsi :
 
-| Priorité | Fonctionnalité | Statut |
-|---|---|---|
-| P0 | Site vitrine public (pages statiques) | ✅ Réalisé |
-| P0 | API REST (auth, users, classes, cours, documents, groupes) | ✅ Réalisé |
-| P0 | Dashboard admin (CRUD complet) | ✅ Réalisé (à refactoriser) |
-| P0 | Conception BDD (MCD/MLD) | ✅ Réalisé |
-| P1 | Pipeline CI/CD + déploiement staging | ✅ Réalisé |
-| P1 | Dashboards par rôle (staff, famille, élève) | 🔄 En cours |
-| P2 | Service web (messagerie / partage docs) | 🔄 À finaliser |
-| P2 | Déploiement production | 🔄 À réaliser |
+| Priorité | Fonctionnalité                                             | Statut                      |
+| -------- | ---------------------------------------------------------- | --------------------------- |
+| P0       | Site vitrine public (pages statiques)                      | ✅ Réalisé                  |
+| P0       | API REST (auth, users, classes, cours, documents, groupes) | ✅ Réalisé                  |
+| P0       | Dashboard admin (CRUD complet)                             | ✅ Réalisé (à refactoriser) |
+| P0       | Conception BDD (MCD/MLD)                                   | ✅ Réalisé                  |
+| P1       | Pipeline CI/CD + déploiement staging                       | ✅ Réalisé                  |
+| P1       | Dashboards par rôle (staff, famille, élève)                | 🔄 En cours                 |
+| P2       | Service web (messagerie / partage docs)                    | 🔄 À finaliser              |
+| P2       | Déploiement production                                     | 🔄 À réaliser               |
 
 ### 3.2 Modélisation des données
 
@@ -109,18 +111,18 @@ La conception de la base de données est documentée dans les fichiers suivants 
 
 #### Entités principales
 
-| Entité | Rôle |
-|---|---|
-| `User` | Compte unique pour tous les profils (admin, staff, parent, student) |
-| `StaffProfile` / `ParentProfile` / `StudentProfile` | Profils étendus liés à `User` |
-| `Year` | Année scolaire |
-| `Class` | Classe rattachée à une année et un professeur principal |
-| `Lecture` | Cours : matière, horaire, classe, enseignant |
-| `Register` | Table d'inscription élève ↔ classe |
-| `Document` | Fichier ou dossier avec arborescence auto-référentielle |
-| `Permission` / `DocumentShare` | Droits d'accès polymorphiques (user ou group) |
-| `Group` | Groupe transversal (classe, staff, parents, etc.) |
-| `EnrollmentRequest` | Candidature d'inscription d'un élève |
+| Entité                                              | Rôle                                                                |
+| --------------------------------------------------- | ------------------------------------------------------------------- |
+| `User`                                              | Compte unique pour tous les profils (admin, staff, parent, student) |
+| `StaffProfile` / `ParentProfile` / `StudentProfile` | Profils étendus liés à `User`                                       |
+| `Year`                                              | Année scolaire                                                      |
+| `Class`                                             | Classe rattachée à une année et un professeur principal             |
+| `Lecture`                                           | Cours : matière, horaire, classe, enseignant                        |
+| `Register`                                          | Table d'inscription élève ↔ classe                                  |
+| `Document`                                          | Fichier ou dossier avec arborescence auto-référentielle             |
+| `Permission` / `DocumentShare`                      | Droits d'accès polymorphiques (user ou group)                       |
+| `Group`                                             | Groupe transversal (classe, staff, parents, etc.)                   |
+| `EnrollmentRequest`                                 | Candidature d'inscription d'un élève                                |
 
 ### 3.3 Diagrammes UML
 
@@ -176,14 +178,14 @@ Le site vitrine est une application **Next.js 15** avec App Router, rendu hybrid
 
 **Pages réalisées :**
 
-| Route | Contenu |
-|---|---|
-| `/` | Page d'accueil — hero, valeurs, présentation rapide |
-| `/college` | Présentation détaillée du collège |
-| `/pedagogie` | Approche pédagogique |
-| `/don` | Espace donateurs — intégration HelloAsso |
-| `/contact` | Formulaire de contact |
-| `/mentions-legales` | Mentions légales et politique de confidentialité |
+| Route               | Contenu                                             |
+| ------------------- | --------------------------------------------------- |
+| `/`                 | Page d'accueil — hero, valeurs, présentation rapide |
+| `/college`          | Présentation détaillée du collège                   |
+| `/pedagogie`        | Approche pédagogique                                |
+| `/don`              | Espace donateurs — intégration HelloAsso            |
+| `/contact`          | Formulaire de contact                               |
+| `/mentions-legales` | Mentions légales et politique de confidentialité    |
 
 **Arbitrages UX réalisés :**
 
@@ -234,15 +236,15 @@ Les tests unitaires et fonctionnels sont en cours de mise en place. Le pipeline 
 
 Le workflow Git est documenté dans [docs/workflow/workflow.md](./workflow/workflow.md).
 
-| Mécanisme | Outil | Rôle |
-|---|---|---|
-| Branches | `feature/*` → `dev` → `main` | Isolation des développements |
-| Commits | Conventional Commits | Traçabilité et changelog automatique |
-| PR | GitHub Rulesets | Protection de `main` et `dev` |
-| CI | GitHub Actions | Lint, tests, audit sécurité |
-| CD | GitHub Actions → VPS Monitor | Déploiement automatique sur staging |
-| Pre-commit | Python pre-commit | Validation locale avant push |
-| Releases | GitHub Actions | Tags sémantiques automatiques (SemVer) |
+| Mécanisme  | Outil                        | Rôle                                   |
+| ---------- | ---------------------------- | -------------------------------------- |
+| Branches   | `feature/*` → `dev` → `main` | Isolation des développements           |
+| Commits    | Conventional Commits         | Traçabilité et changelog automatique   |
+| PR         | GitHub Rulesets              | Protection de `main` et `dev`          |
+| CI         | GitHub Actions               | Lint, tests, audit sécurité            |
+| CD         | GitHub Actions → VPS Monitor | Déploiement automatique sur staging    |
+| Pre-commit | Python pre-commit            | Validation locale avant push           |
+| Releases   | GitHub Actions               | Tags sémantiques automatiques (SemVer) |
 
 ---
 
@@ -267,9 +269,9 @@ Le `vps-monitor` est un service interne développé en parallèle qui gère les 
 
 ```yaml
 services:
-  frontend:   # Next.js — port 3000 (interne)
-  backend:    # Express — port 5000 (interne)
-  mongodb:    # MongoDB — port 27017 (interne uniquement)
+  frontend: # Next.js — port 3000 (interne)
+  backend: # Express — port 5000 (interne)
+  mongodb: # MongoDB — port 27017 (interne uniquement)
   # Reverse proxy : Nginx ou Caddy (à configurer en production)
 ```
 
@@ -277,14 +279,14 @@ Les conteneurs sont isolés dans un réseau Docker interne. La base de données 
 
 ### 5.3 Sécurité de l'infrastructure
 
-| Mesure | Statut |
-|---|---|
-| Accès SSH par clé (mot de passe désactivé) | ✅ |
-| HTTPS / TLS (certificat Let's Encrypt) | 🔄 À configurer en production |
-| Pare-feu (ports 22, 80, 443 uniquement) | ✅ Staging |
-| Secrets en variables d'environnement | ✅ |
-| Base de données non exposée | ✅ |
-| Audit npm automatique | ✅ CI |
+| Mesure                                     | Statut                        |
+| ------------------------------------------ | ----------------------------- |
+| Accès SSH par clé (mot de passe désactivé) | ✅                            |
+| HTTPS / TLS (certificat Let's Encrypt)     | 🔄 À configurer en production |
+| Pare-feu (ports 22, 80, 443 uniquement)    | ✅ Staging                    |
+| Secrets en variables d'environnement       | ✅                            |
+| Base de données non exposée                | ✅                            |
+| Audit npm automatique                      | ✅ CI                         |
 
 ### 5.4 Solution de production proposée
 
@@ -304,30 +306,30 @@ Cette solution permet à l'association de démarrer sans engagement financier en
 
 ### 6.1 Ce qui est livré
 
-| Livrable | État |
-|---|---|
-| Site vitrine public (6 pages) | ✅ Terminé |
-| API REST (7 ressources, auth JWT, RBAC) | ✅ Terminé |
-| Conception BDD — MCD / MLD | ✅ Terminé |
-| Modèles Mongoose (14 modèles) | ✅ Terminé |
-| Dashboard admin (CRUD complet) | ✅ Fonctionnel (refacto à faire) |
-| Diagrammes UML (use case, activités, séquences, classes) | ✅ Terminé |
-| Pipeline CI/CD (lint, audit, déploiement staging) | ✅ Terminé |
-| Déploiement staging (VPS test) | ✅ Opérationnel |
-| Documentation technique (backend, dashboard, auth, BDD, workflow) | ✅ Terminé |
+| Livrable                                                          | État                             |
+| ----------------------------------------------------------------- | -------------------------------- |
+| Site vitrine public (6 pages)                                     | ✅ Terminé                       |
+| API REST (7 ressources, auth JWT, RBAC)                           | ✅ Terminé                       |
+| Conception BDD — MCD / MLD                                        | ✅ Terminé                       |
+| Modèles Mongoose (14 modèles)                                     | ✅ Terminé                       |
+| Dashboard admin (CRUD complet)                                    | ✅ Fonctionnel (refacto à faire) |
+| Diagrammes UML (use case, activités, séquences, classes)          | ✅ Terminé                       |
+| Pipeline CI/CD (lint, audit, déploiement staging)                 | ✅ Terminé                       |
+| Déploiement staging (VPS test)                                    | ✅ Opérationnel                  |
+| Documentation technique (backend, dashboard, auth, BDD, workflow) | ✅ Terminé                       |
 
 ### 6.2 Ce qui reste à faire
 
-| Tâche | Priorité |
-|---|---|
-| Dashboards par rôle (staff, famille, élève) | Haute |
-| Service web — messagerie / partage de documents | Haute |
-| Refactorisation dashboard admin | Moyenne |
-| Configuration Nginx + HTTPS production | Haute |
-| Déploiement production (Oracle Cloud) | Haute |
-| Tests unitaires et fonctionnels | Moyenne |
-| Guide utilisateur (back-office) | Moyenne |
-| Procès-verbal de recettage | Basse |
+| Tâche                                           | Priorité |
+| ----------------------------------------------- | -------- |
+| Dashboards par rôle (staff, famille, élève)     | Haute    |
+| Service web — messagerie / partage de documents | Haute    |
+| Refactorisation dashboard admin                 | Moyenne  |
+| Configuration Nginx + HTTPS production          | Haute    |
+| Déploiement production (Oracle Cloud)           | Haute    |
+| Tests unitaires et fonctionnels                 | Moyenne  |
+| Guide utilisateur (back-office)                 | Moyenne  |
+| Procès-verbal de recettage                      | Basse    |
 
 ### 6.3 Justification de l'état d'avancement
 
@@ -355,5 +357,5 @@ Le développement a été mené en autonomie sur les parties back-end, conceptio
 
 ---
 
-*Document rédigé par : **Damien Paszkiewicz** — B3 Développeur Web*
-*Projet : My Digital Project 2025–2026 — MyDigitalSchool*
+_Document rédigé par : **Damien Paszkiewicz** — B3 Développeur Web_
+_Projet : My Digital Project 2025–2026 — MyDigitalSchool_

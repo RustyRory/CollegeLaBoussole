@@ -31,7 +31,6 @@ export default function TarifsSection() {
 
         {/* Card blanche */}
         <div className="bg-white rounded-2xl p-8 md:p-10">
-          
           <div className="grid md:grid-cols-2 gap-10 items-stretch">
             {/* Texte + CTAs */}
             <div className="flex flex-col gap-6">
@@ -40,14 +39,13 @@ export default function TarifsSection() {
               </h3>
               <p className="text-sm text-[#1C1410]/60 leading-relaxed">
                 Le modèle économique de La Boussole repose sur la solidarité :
-                ceux qui peuvent plus contribuent pour ceux qui peuvent moins. Les
-                frais sont calculés à partir de votre quotient familial (revenus
-                nets ÷ parts fiscales). Un entretien confidentiel avec la direction
-                permet de définir ensemble votre contribution.
+                ceux qui peuvent plus contribuent pour ceux qui peuvent moins.
+                Les frais sont calculés à partir de votre quotient familial
+                (revenus nets ÷ parts fiscales). Un entretien confidentiel avec
+                la direction permet de définir ensemble votre contribution.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-3 mt-auto">
-                
                 <Link
                   href="/contact"
                   className="inline-flex items-center gap-2 rounded-full border border-[#1C1410]/30 px-6 py-3 text-sm font-medium text-[#1C1410] hover:border-[#1C1410] transition-colors"
@@ -106,8 +104,8 @@ export default function TarifsSection() {
               </div>
 
               <p className="text-xs text-white/40 leading-relaxed">
-                Cette simulation est indicative. Le montant final est défini lors
-                d'un entretien confidentiel avec la direction.
+                Cette simulation est indicative. Le montant final est défini
+                lors d'un entretien confidentiel avec la direction.
               </p>
             </div>
           </div>

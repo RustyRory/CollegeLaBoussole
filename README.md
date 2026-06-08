@@ -20,15 +20,21 @@ Le projet vise à **structurer, moderniser et professionnaliser** la communicati
 
 ### Frontend
 
-- TODO
+- **Next.js 15** (App Router, SSR/SSG)
+- **TypeScript**
+- **Tailwind CSS v4**
+- **Radix UI** (composants accessibles)
+- **Recharts** (graphiques dashboard)
 
 ### Backend
 
-- TODO
+- **Express 5** + **TypeScript**
+- **Mongoose** (ODM MongoDB)
+- **JWT** (jsonwebtoken + bcryptjs)
 
 ### Base de données
 
-- TODO
+- **MongoDB**
 
 ### Dev & Qualité
 
